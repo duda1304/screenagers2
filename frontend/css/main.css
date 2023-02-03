@@ -1,0 +1,189 @@
+@font-face {
+    font-family: 'fixedsys';
+    src: url('/fonts/FSEX300.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+  }
+  
+  @font-face {
+    font-family: 'AvenirBlack';
+    src: url('../fonts/Avenir\ Black.ttf');
+  }
+  
+  @font-face {
+    font-family: 'AvenirRoman';
+    src: url('../fonts/Avenir-Roman.ttf');
+  }
+  
+  @font-face {
+    font-family: 'DINLight';
+    src: url('../fonts/DINLight.ttf');
+  }
+  
+  @font-face {
+    font-family: 'faBrands';
+    src: url('../fonts/fa-brands-400.ttf');
+  }
+  
+  @font-face {
+    font-family: 'fishbourne';
+    src: url('../fonts/fishburne.ttf');
+  }
+  
+  @font-face {
+    font-family: 'RobotoMedium';
+    src: url('../fonts/Roboto-Medium.ttf');
+  }
+  
+  @font-face {
+    font-family: 'RobotoRegular';
+    src: url('../fonts/Roboto-Regular.ttf');
+  }
+
+.horizontal {
+    display:flex; 
+    flex-wrap: wrap;
+    flex-direction: row; 
+    align-items: stretch; 
+    height: 100vh; 
+    width:100vw;
+}
+
+.vertical {
+    display:flex; 
+    flex-wrap: wrap;
+    flex-direction: column; 
+    align-items: center; 
+    align-items: stretch; 
+    height: 100vh; 
+    width:100vw;
+}
+
+#emo_section {
+    order: 1;
+}
+
+#screen_section {
+    order:2
+}
+
+#console_section {
+    order: 3;
+}
+
+/* Wtih both horizontal and vertical */
+.same-size #screen_section,  .same-size #emo_section, .same-size #console_section{
+    flex: 1 0px;
+}
+
+.screen-larger #screen_section{
+    flex: 2 0px;
+}
+
+.screen-larger #emo_section, .screen-larger #console_section{
+    flex: 1 0px;
+}
+
+/* With vertical */
+
+.vertical.screen-right #screen_section, .vertical.screen-right #emo_section, .vertical.screen-right #console_section {
+    flex: 1 0px;
+}
+.vertical.screen-right #emo_section {
+    order: 1;
+    width: 30%;
+    height: auto;
+}
+
+.vertical.screen-right #console_section {
+    order: 2;
+    width: 30%;
+    height: auto;
+}
+
+.vertical.screen-right #break-column {
+    order: 3;
+    flex-basis: 100%;
+    width: 0;
+}
+
+.vertical.screen-right #screen_section {
+    order: 4;
+    width: 70%;
+    height: auto;
+}
+
+.vertical.screen-left #screen_section, .vertical.screen-left #emo_section, .vertical.screen-left #console_section {
+    flex: 1 0px;
+}
+
+.vertical.screen-left #emo_section {
+    order: 3;
+    width: 30%;
+    height: auto;
+}
+
+.vertical.screen-left #console_section {
+    order: 4;
+    width: 30%;
+    height: auto;
+}
+
+.vertical.screen-left #break-column {
+    order: 2;
+    flex-basis: 100%;
+    width: 0;
+}
+
+.vertical.screen-left #screen_section {
+    order: 1;
+    width: 70%;
+    height: auto;
+}
+
+/* Screen on top and bottom goes with horizontal class */
+.screen-top #screen_section {
+    flex-basis: 100%;
+    order: 1;
+}
+
+.screen-top #emo_section {
+    order: 2;
+    flex-grow: 1
+} 
+
+.screen-top #console_section {
+    order: 3;
+    flex-grow: 1
+}
+
+.screen-bottom #screen_section {
+    flex-basis: 100%;
+    order: 3;
+}
+
+.screen-bottom #emo_section {
+    order: 1;
+    flex-grow: 1
+} 
+
+.screen-bottom #console_section {
+    order: 2;
+    flex-grow: 1
+}
+
+/* .subtitles {
+    width: 100%;
+    height: 15%;
+    color: white;
+    background-color: rgb(211,211,211, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5vw;
+    z-index: 100;
+  } */
+
+
+  

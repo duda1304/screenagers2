@@ -1,0 +1,156 @@
+.box-fit {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: auto;
+  height: auto;
+}
+
+.box-full {
+  position: absolute !important;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: auto;
+  height: auto;
+  z-index: 999;
+}
+
+.box-pass {
+  pointer-events: none;
+}
+.box-pass > * {
+  pointer-events: auto;
+}
+
+.box-center {
+  display: flex;
+  flex-direction: column;
+  /* pointer-events: none; */
+}
+
+.box-center > :first-child {
+  /* pointer-events: auto; */
+  margin: auto;
+  margin-top: auto;
+  margin-bottom: 0;
+}
+
+.box-center > :last-child {
+  /* pointer-events: auto; */
+  margin: auto;
+  margin-top: 0;
+  margin-bottom: auto;
+}
+
+.box-center > :not(:first-child):not(:last-child) {
+  /* pointer-events: auto; */
+  margin: 0 auto;
+}
+
+.box-center > :only-child {
+  /* pointer-events: auto; */
+  margin: auto;
+}
+
+.box-center > br {
+  margin-top: 1em !important;
+}
+
+/* align
+======================================== */
+
+.box-align-center {
+  justify-content: center;
+}
+.box-align-start {
+  justify-content: flex-start;
+}
+.box-align-end {
+  justify-content: flex-end;
+}
+
+/* grid
+======================================== */
+
+/* https://medium.com/@js_tut/css-grid-tutorial-filling-in-the-gaps-c596c9534611 */
+
+.box-grid {
+  display: grid;
+  grid-gap: var(--gap, 0);
+  padding: var(--gap, 0);
+  grid-template-columns: repeat(var(--cols, 5), auto);
+}
+
+/* ratio
+======================================== */
+
+.box-ratio::before {
+  content: '';
+  width: 1px;
+  margin-left: -1px;
+  float: left;
+  height: 0;
+  padding-top: calc(100% / (var(--ratio, 1)));
+}
+
+/* clear float */
+.box-ratio::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+/* layout
+======================================== */
+
+.box-v {
+  display: flex;
+  flex-direction: row;
+}
+
+.box-h {
+  display: flex;
+  flex-direction: column;
+}
+
+.box-v > *,
+.box-h > * {
+  flex: 1 1 0%;
+  /* https://stackoverflow.com/a/41675912 */
+  /* min-width: 0;
+  min-height: 0; */
+  position: relative;
+
+  transition: flex 0.1s;
+}
+
+.box-min,
+.box-h > b,
+.box-h > footer,
+.box-h > header,
+.box-h > button,
+.box-h > label,
+.box-h > span,
+.box-h > output,
+.box-h > .ui-field {
+  flex: 0 0 auto;
+  /* width: auto !important; */
+}
+
+/* .box-v > output, */
+.box-v > aside {
+  flex: 0 0 auto;
+  max-width: 50%;
+  overflow-y: auto;
+}
+
+.box-wrap {
+  flex-wrap: wrap;
+}
+.box-wrap > * {
+  min-width: min-content;
+}

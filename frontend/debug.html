@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="/css/common.css" />
+
+<title>🐞 DEBUG</title>
+
+<style>
+  html {
+    background-color: #222;
+  }
+  iframe {
+    border: 2px solid #333;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 200%;
+    height: 200%;
+    transform-origin: 0 0;
+    transform: scale(0.5);
+    background: transparent;
+  }
+</style>
+
+<main>
+  <div class="box-debug box-fit box-h" style="height:40vw">
+    <div class="box-v">
+      <section><iframe src="/console"></iframe></section>
+      <section><iframe src="/screen"></iframe></section>
+      <section><iframe src="/laptop"></iframe></section>
+    </div>
+    <div class="box-v">
+      <section style="flex: 0 0 33.33vw; text-align: center;">
+        <p>CONSOLE</p>
+      </section>
+      <section style="flex: 0 0 33.33vw; text-align: center;">
+        <p>SCREEN</p>
+      </section>
+      <section style="flex: 0 0 33.33vw; text-align: center;">
+        <p>LAPTOP</p>
+      </section>
+    </div>
+  </div>
+
+  <div
+    class="box-debug box-h"
+    style="position:absolute;bottom:0;right:0;height:50vh;width:calc(150vh * 0.6);"
+  >
+    <div class="box-v">
+      <section><iframe src="/?id=1"></iframe></section>
+      <section><iframe src="/?id=2"></iframe></section>
+      <section><iframe src="/?id=3"></iframe></section>
+    </div>
+  </div>
+</main>
+

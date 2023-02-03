@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+/>
+<meta name="theme-color" content="#333333" />
+<meta name="msapplication-navbutton-color" content="#333333" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<link rel="manifest" href="/static/manifest.json" />
+<link rel="icon" sizes="32x32" href="/static/icon.png" />
+<link rel="apple-touch-startup-image" href="/static/icon.png" />
+<link rel="stylesheet" href="/css/common.css?v=1.0" />
+<link rel="stylesheet" href="/css/assistant.css" />
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/lib/jquery.min.js"></script>
+<script src="/js/lib/howler.min.js"></script>
+<script src="/js/lib/twemoji.min.js"></script>
+<link rel="stylesheet" href="./js/lib/jquery-ui-1.13.2/jquery-ui.min.css" />
+<script src="./js/lib/jquery-ui-1.13.2/jquery-ui.min.js"></script>
+
+<title>🎛️ ASSISTANT</title>
+
+<link rel="stylesheet" href="/data/decors.css?v=1.0" />
+
+<link rel="stylesheet" href="/js/lib/spectrum.css" />
+<script src="/js/lib/spectrum.min.js"></script>
+
+<link rel="stylesheet" href="/js/lib/jquery-ui.min.css" />
+<script src="/js/lib/jquery-ui.min.js"></script>
+
+<script src="/js/lib/mousetrap.min.js"></script>
+<script src="/js/lib/jquery.scrollTo.min.js"></script>
+
+<link rel="stylesheet" href="/css/master.css?v=1.0" />
+<link rel="stylesheet" href="./css/editor.css" />
+
+<script src="./js/constants.js"></script>
+
+<main id="master">
+  <div class="box box-tools closed draggable">
+    <b>tools</b>
+    <div id="tools"></div>
+  </div>
+  <div class="box box-users closed draggable resizable">
+    <b>users</b>
+    <div class="_hide  box-random-users">
+      <input
+        title="Nombre d'utilisateurs tirés au sort"
+        id="number_random_users"
+        type="number"
+        min="0"
+        value="1"
+      />
+      <button id="select_random_users" class="icon box-min">🎲</button>
+    </div>
+    <div class="users_container">
+      <table class="table-users">
+        <thead>
+          <th><input checked id="users_check_all" type="checkbox" /></th>
+          <th></th>
+          <th>pseudo</th>
+          <th>karma</th>
+        </thead>
+        <tbody id="users"></tbody>
+      </table>
+    </div>
+    <div id="users_stats">
+      <span id="nb_users_inscrits">0</span> registered /
+      <span id="nb_users_connectes">0</span> connected
+    </div>
+    <div id="reponses" class="box-wrap"></div>
+    <select id="select-saved-response"></select>
+    <div>
+      <form id="interactions">
+        <div class="">
+          <div style="position: relative;">
+          <textarea
+            cols="44"
+            rows="12"
+            id="one_shot__message"
+            placeholder="message"
+            name="message"
+          ></textarea>
+          <div id="image-msg-div">
+            <img id="image-msg" src=""></img>
+            <div id="remove-image" style="display: none;">x</div>
+          </div>
+          </div>
+          <button
+            type="submit"
+            title="Send message"
+            data-title="send"
+            class="icon"
+          >
+            📩
+          </button>
+          <div style="display:flex; flex-direction: row; align-items: center; width: 100%;">
+            <button
+              type="submit"
+              title="Save message"
+              data-title="save"
+              class="icon"
+            >
+              Save message
+            </button>
+            <button
+              type="submit"
+              title="Delete message"
+              data-title="delete"
+              class="icon"
+            >
+              Delete message
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="box box-monitoring_incoming closed draggable resizable">
+    <b>monitoring incoming</b>
+    <div id="monitoring_incoming"></div>
+  </div>
+  <div class="box box-monitoring_outgoing closed draggable resizable">
+    <b>monitoring outgoing</b>
+    <div id="monitoring_outgoing"></div>
+  </div>
+  <div class="box box-audio_video_control closed draggable">
+    <b>audio/video control</b>
+    <div>
+      <button class="repet__rewind icon box-min">⏪</button>
+      <button class="repet__pause toggle icon box-min">⏸️</button>
+      <button class="repet__forward icon box-min">⏩</button>
+      <input
+        style="width:150px"
+        min="0"
+        max="59"
+        id="repet__min"
+        type="number"
+        class="box-min"
+        placeholder="minutes"
+      />
+    </div>
+  </div>
+  <div class="box box-subtitles closed draggable">
+    <b>subtitles control</b>
+    <div>
+      <select id="select-visual-novel"></select>
+      <fieldset>
+        <legend>Subtitles</legend>
+        <label for="on">on</label>
+        <input type="radio" value="on" id="on" name="novel_subtitles"></input>
+        <label for="off">off</label>
+        <input type="radio" value="off" id="off" name="novel_subtitles" checked></input>
+      </fieldset>
+      <fieldset id="subtitles-position" style="width: 100%">
+        <label for="down">subtitles down</label>
+        <input type="radio" value="down" id="down" name="subtitles_position" checked>
+        <label for="up">subtitles up</label>
+        <input type="radio" value="up" id="up" name="subtitles_position">
+      </fieldset>
+      <div class="subtitles-style">
+        <select id="load-saved-style"></select>
+      </div>
+      <div id="subtitles-control">
+        <button id="subtitles__prev" class="icon">⬅️</button>
+        <p id="line">Subtitle lines</p>
+        <button id="subtitles__next" class="icon">➡️</button>
+      </div>
+    </div>
+  </div>
+  <div class="box box-meme-collective_song closed draggable resizable">
+    <b>meme/collective song</b>
+    <div id="meme">
+      <div class="boite--image">
+      </div>
+    </div>
+    <div id="collective_song">
+    </div>
+  </div>
+  <!-- <div class="box box-collective_song closed draggable resizable">
+    <b>collective song</b>
+    <div id="collective_song">
+    </div>
+  </div> -->
+  
+  <!-- <div class="box-h box-fit"> -->
+    <!-- <div class="box-v">
+      <div class="box-h">
+        <div class="box-v">
+          <div class="box-h"> -->
+            <!-- <header class="box-h box-tools _closed">
+              <b>tools</b>
+              <div id="tools"></div>
+            </header>
+              <div class="box-h box-users closed">
+                <b>users</b>
+                <header class="_hide box-v box-random-users">
+                  <input
+                    title="Nombre d'utilisateurs tirés au sort"
+                    id="number_random_users"
+                    type="number"
+                    min="0"
+                    value="1"
+                  />
+                  <button id="select_random_users" class="icon box-min">🎲</button>
+                </header>
+                <div class="users_container">
+                  <table class="table-users">
+                    <thead>
+                      <th><input checked id="users_check_all" type="checkbox" /></th>
+                      <th></th>
+                      <th>pseudo</th>
+                      <th>karma</th>
+                    </thead>
+                    <tbody id="users"></tbody>
+                  </table>
+                </div>
+                <header id="users_stats">
+                  <span id="nb_users_inscrits">0</span> registered /
+                  <span id="nb_users_connectes">0</span> connected
+                </header>
+                <footer id="reponses" class="box-v box-wrap"></footer>
+                <footer>
+                  <form id="interactions">
+                    <div class="box-h">
+                      <textarea
+                        cols="44"
+                        rows="3"
+                        id="one_shot__message"
+                        placeholder="message"
+                        name="message"
+                      ></textarea>
+                      <img id="image-msg"></img>
+                      <button
+                        type="submit"
+                        title="Envoyer le message (Ctrl+Enter)"
+                        class="icon"
+                      >
+                        📩
+                      </button>
+                    </div>
+                  </form>
+                </footer>
+              </div>
+              <div class="box-h box-monitoring">
+                <b>monitoring</b>
+                <section id="monitoring"></section>
+              </div>
+              <footer class="box-h box-osc hide">
+                <b>osc</b>
+                <form id="osc">
+                  <div class="box-h">
+                    <input
+                      type="number"
+                      name="message"
+                      placeholder="preset number (0 = Noir)"
+                    />
+                    <div class="box-v">
+                      <button
+                        type="submit"
+                        title="Envoyer le message OSC (Ctrl+Enter)"
+                        class="icon"
+                      >
+                        📢
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </footer>
+            <div class="box-h box-media">
+              <b>media</b>
+              <section id="media">
+                <div class="media_cat">
+                  <i title="styles css">🗛</i>
+                  <div class="media_styles"></div>
+                </div>
+                <div class="media_cat">
+                  <i title="decors css">🌈</i>
+                  <div class="media_decors"></div>
+                </div>
+                <div class="media_cat">
+                  <i title="pages iframe">🌐</i>
+                  <div class="media_pages"></div>
+                </div>
+                <div class="media_cat">
+                  <i title="videos">📽️</i>
+                  <div class="media_video"></div>
+                </div>
+                <div class="media_cat">
+                  <i title="audio">🎧</i>
+                  <div class="media_audio"></div>
+                </div>
+                <div class="media_cat">
+                  <i title="gifs">🖼️</i>
+                  <div class="media_gifs"></div>
+                </div>
+                <div class="media_cat">
+                  <i title="images">📷</i>
+                  <div class="media_images"></div>
+                </div>
+              </section>
+            </div>
+            <footer class="box-h box-shortcuts closed">
+                <b>screens</b>
+                <div id="screens" class="box-v"></div>
+            </footer>
+            <footer class="box-v">
+                <button class="repet__rewind icon box-min">⏪</button>
+                <button class="repet__pause toggle icon box-min">⏸️</button>
+                <button class="repet__forward icon box-min">⏩</button>
+                <input
+                  style="width:78px"
+                  min="0"
+                  max="59"
+                  id="repet__min"
+                  type="number"
+                  class="box-min"
+                  placeholder="minutes"
+                />
+                <button class="icon" id="send_all_screens">📢</button>
+            </footer>
+          </div>
+          <div class="box-h" style="flex: 2 0px;">
+            <b>meme</b>
+            <div id="meme">
+              <div class="boite--image">
+              </div>
+            </div>
+          </div>
+          <div class="box-h" style="flex: 2 0px;">
+            <b>collective song</b>
+            <div id="collective_song"></div>
+          </div> -->
+        <!-- </div>
+      </div>
+     
+    </div>
+  </div> -->
+</main>
+<script src="/js/common.js?v=1.0"></script>
+<script>
+  cat = 'master';
+  const page = 'assistant';
+</script>
+<script src="/js/iso.js?v=1.0"></script>
+<script src="/js/boites_mobile.js?v=1.0"></script>
+<script src="/js/boites_master.js?v=1.0"></script>
+<script src="/js/modes.js?v=1.0"></script>
+<script src="/js/master.js?v=1.0"></script>
+<script src="/js/assistant.js"></script>
+
+

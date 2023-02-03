@@ -1,0 +1,426 @@
+body {
+  font-size: 22px;
+  font-size: 5vmin;
+  color: #fff;
+}
+
+@media (min-width: 700px) {
+  body {
+    font-size: 22px;
+    font-size: 3vmin;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: rgb(27, 31, 35);
+}
+
+.box-mobile > header,
+.box-mobile > footer,
+.box-mobile > section {
+  padding: 1em;
+}
+.box-mobile > header {
+  height: 3.1em;
+}
+.box-mobile > footer {
+  height: 3em;
+  padding-top: 0.5em;
+}
+.box-mobile > section {
+  padding: 1em;
+  text-align: center;
+}
+
+section {
+  overflow: auto;
+}
+
+img.emoji--big {
+  width: 7em;
+  height: 7em;
+  margin-top: 2em;
+}
+
+input,
+textarea,
+select,
+button {
+  padding: 0.7em 1em;
+  font-size: inherit;
+  color: #fff;
+  background-color: rgb(27, 31, 35);
+  border: 0 none;
+  outline: none;
+}
+
+.alert__body,
+select,
+button {
+  position: relative;
+  background-color: rgb(44, 50, 56);
+  background-image: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(0, 0, 0, 0) 50%,
+    rgba(0, 0, 0, 0.15) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  border-radius: 0.4em;
+
+  text-shadow: 0 -0.08em 0 rgba(0, 0, 0, 0.5);
+
+  box-shadow: inset 0 0.05em rgba(255, 255, 255, 0.2),
+    inset 0 0 0.1em rgba(0, 0, 0, 0.5),
+    0 0.2em rgb(25, 28, 31);
+}
+
+button[disabled],
+button.active,
+button:active {
+  margin-top: 0.1em;
+  box-shadow: inset 0 0.05em rgba(255, 255, 255, 0.2),
+    0 0.1em rgb(25, 28, 31);
+}
+
+button[disabled] {
+  background-color: rgb(60, 64, 68);
+  color: #999;
+}
+
+button.active,
+button:active {
+  background-color: rgb(12, 69, 125);
+  color: #fff;
+}
+
+.no_btn::before {
+  display: none;
+}
+
+.no_btn:active,
+.no_btn {
+  padding: 0;
+  background: transparent;
+  border: 0 none;
+  box-shadow: none;
+  text-shadow: none;
+}
+
+/* Alert
+======== */
+#alert {
+  z-index: 9999;
+  overflow: auto;
+  padding: 2em;
+  background-color: rgba(10, 10, 10, 0.5);
+  backdrop-filter: blur(0.2em);
+  -webkit-backdrop-filter: blur(0.2em);
+}
+.alert__body {
+  width: 100%;
+  padding: 0.5em;
+  padding-bottom: 0.7em;
+
+  box-shadow: inset 0 0.05em rgba(255, 255, 255, 0.2),
+    0 0.2em rgb(25, 28, 31),
+    0 0.2em 0.2em 0.09em rgb(0, 0, 0, 0.5),
+    0 0 9em 1em rgb(0, 0, 0, 0.5);
+}
+.alert__body--nocontent {
+  padding-top: 0;
+}
+.alert__body button {
+  margin-top: 0.5em;
+}
+.alert__title {
+  font-size: 120%;
+  font-weight: 800;
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+}
+
+.alert__text {
+  padding: 1em 0.1em;
+  padding-bottom: 0.9em;
+}
+
+
+.alert__text pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.alert__text img {
+  width: 100%;
+}
+
+#online {
+  font-style: italic;
+  opacity: 0.3;
+}
+#online.disconnected {
+  color: #f34b79;
+  opacity: 1;
+}
+
+#messagebox {
+  position: relative;
+  font-size: 70%;
+}
+#messagebox button {
+  position: absolute;
+  background: none;
+  border: 0 none;
+  top: 0.65em;
+  right: 0.9em;
+}
+#messagebox svg {
+  width: 1.2em;
+}
+#input__message {
+  width: 100%;
+  border-radius: 10em;
+  padding-left: 1.3em;
+  padding-right: 3em;
+}
+
+/* Boites
+========= */
+
+/* chat */
+#chat {
+  padding-bottom: 0;
+  text-align: left;
+  font-size: 70%;
+}
+
+.chat_blank {
+  height: 100%;
+}
+
+.bulle {
+  padding-bottom: 0.6em;
+  padding-top: 0.6em;
+
+  padding-left: 1em;
+  padding-right: 1em;
+
+  margin: 0.25em;
+  display: inline-block;
+  border-radius: 1em;
+  text-align: left;
+
+  word-break: break-word;
+}
+
+.bulle--you {
+  background-color: rgb(47, 51, 54);
+  border-bottom-left-radius: 0;
+}
+
+.bulle--me {
+  background-color: rgb(29, 161, 242);
+  border-bottom-right-radius: 0;
+}
+
+.chat__line--me {
+  text-align: right;
+}
+
+#image-msg {
+  width: 100%;
+}
+
+/* singe savant */
+#singe_savant {
+  padding: 0;
+}
+#keyboard {
+  text-align: center;
+  width: 44vh;
+  font-size: 3vh;
+}
+#keyboard button {
+  display: inline-block;
+  font-weight: 800;
+  padding: 0em;
+  width: 2.5em;
+  height: 2.5em;
+  margin: 0.15em;
+  border-radius: 2.5em;
+}
+#keyboard button.espace {
+  width: 95%;
+}
+#key {
+  font-size: 1000%;
+  font-weight: 800;
+}
+#no_now {
+  text-align: center;
+}
+
+/* image */
+#image img,
+#image canvas {
+  max-width: 90%;
+  max-height: 60%;
+}
+
+#image_upload {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+#image_upload + label * {
+  pointer-events: none;
+}
+#image label svg {
+  width: 7em;
+}
+
+#image_photo_icon * {
+  pointer-events: none;
+}
+#image_photo_icon path {
+  fill: rgb(44, 50, 56);
+}
+#image_check_icon path {
+  fill: green;
+}
+#image #image_check_icon svg {
+  width: 14em;
+}
+
+/* choix */
+#choix {
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+#choix button {
+  display: block;
+  margin: 1em auto;
+  border: 0;
+  width: 80vw;
+  outline: none;
+}
+
+/* gifs */
+#gifs {
+  text-align: center;
+}
+
+#gifs img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+#gifs button {
+  width: 100%;
+  margin-top: 1em;
+  padding: 1.8em;
+  text-transform: uppercase;
+}
+
+#send_gif {
+  height: 45vh;
+}
+
+/* gamepad */
+.gamepad__cross {
+  width: 9em;
+  height: 9em;
+  position: absolute;
+  left: 2em;
+  top: 58%;
+}
+.gamepad__buttons {
+  width: 9em;
+  height: 9em;
+  position: absolute;
+  right: 1.5em;
+  top: 71%;
+}
+#gamepad {
+  font-size: 5.1vmin;
+  font-weight: 800;
+}
+#gamepad button {
+  position: absolute;
+  width: 3em;
+  height: 3em;
+  font-weight: 800;
+  touch-action: manipulation;
+}
+.gamepad__buttons button {
+  border-radius: 100%;
+  background-color: #f34b79;
+}
+#up {
+  top: 0;
+  transform: translate(-50%, 0%);
+}
+#down {
+  /* bottom: 0; */
+  top: 100%;
+  transform: translate(-50%, -100%);
+}
+#left {
+  top: 50%;
+  left: 0;
+  transform: translate(0%, -50%);
+}
+#right {
+  top: 50%;
+  right: 0;
+  transform: translate(0%, -50%);
+}
+#a {
+  top: 19%;
+  right: 0.5em;
+}
+#b {
+  top: 43%;
+  right: 4em;
+}
+
+/* musique */
+
+#musique select {
+  font-size: 200%;
+  padding: 0.5em;
+}
+
+/* collective song */
+#collective_song {
+  align-items: center;
+  justify-content: center;
+}
+
+.question_box {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: auto!important;
+  margin-top: auto!important;
+  color:white;
+}
+
+.question_box input {
+  margin-top: 5%;
+  margin-bottom: 5%;
+}
+
+
+

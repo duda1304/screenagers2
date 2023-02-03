@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+/>
+<meta name="theme-color" content="#333333" />
+<meta name="msapplication-navbutton-color" content="#333333" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<link rel="manifest" href="./static/manifest.json" />
+<link rel="icon" sizes="32x32" href="./static/icon.png" />
+<link rel="apple-touch-startup-image" href="./static/icon.png" />
+
+<link rel="stylesheet" href="./css/common.css" />
+<link rel="stylesheet" href="./css/master.css" />
+
+<script src="./socket.io/socket.io.js"></script>
+<script src="./js/lib/jquery.min.js"></script>
+<script src="./js/lib/howler.min.js"></script>
+<script src="./js/lib/twemoji.min.js"></script>
+
+<title>EDITOR</title>
+
+<link rel="stylesheet" href="./data/decors.css?v=1.0" />
+<link rel="stylesheet" href="./data/all_screens.css?v=1.0" />
+
+
+<link rel="stylesheet" href="./js/lib/spectrum.css" />
+<script src="./js/lib/spectrum.min.js"></script>
+
+<link rel="stylesheet" href="./js/lib/jquery-ui-1.13.2/jquery-ui.min.css" />
+<script src="./js/lib/jquery-ui-1.13.2/jquery-ui.min.js"></script>
+
+<script src="./js/lib/mousetrap.min.js"></script>
+<script src="./js/lib/jquery.scrollTo.min.js"></script>
+
+<script src="./js/processor.js"></script>
+
+<script src="./js/constants.js"></script>
+
+<link rel="stylesheet" href="./css/editor.css" />
+
+<link rel="stylesheet" href=".listcomponent/style.css">
+
+
+<!-- EDITOR -->
+<!-- <link rel="stylesheet" href="./frontend/css/lib/cropper.css" />
+<script src="./frontend/js/lib/cropper.js"></script>
+<script src="./frontend/js/lib/main.js"></script> -->
+
+
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/2.0.0-alpha.2/cropper.min.js" integrity="sha512-IlZV3863HqEgMeFLVllRjbNOoh8uVj0kgx0aYxgt4rdBABTZCl/h5MfshHD9BrnVs6Rs9yNN7kUQpzhcLkNmHw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/2.0.0-alpha.2/cropper.css" integrity="sha512-5ZQRy5L3cl4XTtZvjaJRucHRPKaKebtkvCWR/gbYdKH67km1e18C1huhdAc0wSnyMwZLiO7nEa534naJrH6R/Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/2.0.0-alpha.2/cropper.js" integrity="sha512-witv14AEvG3RlvqCAtVxAqply8BjTpbWaWheEZqOohL5pxLq3AtIwrihgz7SsxihwAZkhUixj171yQCZsUG8kw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/2.0.0-alpha.2/cropper.min.css" integrity="sha512-6QxSiaKfNSQmmqwqpTNyhHErr+Bbm8u8HHSiinMEz0uimy9nu7lc/2NaXJiUJj2y4BApd5vgDjSHyLzC8nP6Ng==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<link href="fonts/fontawesome-free-6.1.1-web/css/all.css" rel="stylesheet"> -->
+
+<!-- <link  rel="stylesheet" href="../node_modules/cropperjs/src/css/cropper.css"  />
+<script src="../node_modules/cropperjs/src/js/cropper.js"></script> -->
+
+<!-- <script type="text/javascript" src="../node_modules/osc-js/lib/osc.min.js"></script> -->
+
+<body>
+<main id="editor-main">
+  <div id="left-menu">
+    <div id="media-menu">
+      <div class="section-header screens">
+        <div class="active">Screen</div>
+        <div>Laptop</div>
+      </div>
+      <div id="step-media">
+        <ul class="screen"></ul>
+        <ul class="laptop" style="display: none;"></ul>
+      </div>
+      <div class='editor-buttons'>
+        <button onclick="addMedia(event)" class="tooltip">
+          <img src="./icons/plus.svg"></img>
+          <span class="tooltiptext">Click on step in novel to add media</span>
+        </button>
+        <button id="delete-media-button" class="tooltip">
+          <img src="./icons/trash.svg"></img>
+          <span class="tooltiptext">Click on media to delete</span>
+        </button>
+        <button id="edit-media-button" class="tooltip">
+          <img src="./icons/settings.svg"></img>
+          <span class="tooltiptext">Click on media to edit</span>
+        </button>
+        <button onclick="saveStep(event)" class="tooltip">
+          Save
+          <span class="tooltiptext">Click on step in novel to save</span>
+        </button>
+        <button class="tooltip tooltip-step-background">
+          <input
+            autocomplete="off"
+            _list="list_decors"
+            class="color-picker _box-min d-none"
+            id = "preview_background-color"
+            type="text"
+            placeholder="decor"
+            name="decor.src"
+            value='$("#preview").css("background-color")'
+          />
+          <span class="tooltiptext step-background">Step background color</span>
+        </button>
+        <div class="break"></div>
+        <fieldset>
+          <label for="console">Console</label>
+          <input type="checkbox" name="console" id="console-checkbox">
+          <label for="boite" style="display: none;">Boite</label>
+          <input style="display: none;" type="checkbox" name="boite" id="boite-checkbox" checked>
+       </fieldset>
+      </div>
+    </div>
+    <section id="structure">
+      <div class="section-header">Visual novel</div>
+      <div id="structure-content"></div>
+      <div class='editor-buttons'>
+        <button id="add-scene-step-button" onclick="addInStructure('show')"><img src="./icons/plus.svg"></img></button>
+        <button id="delete-scene-step-button" onclick="deleteFromStructure('show')" class="tooltip">
+          <img src="./icons/trash.svg"></img>
+          <span class="tooltiptext">Click on visual novel you want to delete</span></button>
+     </div>
+    </section>
+  </div>
+  <div id="screen" class="preview">
+  </div>
+  <div id="laptop" class="preview" style="display:none;">
+  </div>
+  <div id="right-menu">
+    <div id="media-menu">
+      <div class="section-header">States</div>
+      <form id="boite-form">
+        <header class="box-h box-boites-type">
+          <div id="boites_types" class="box-v box-wrap"></div>
+        </header>
+        <textarea
+          class="screen__input screen__texte"
+          cols="44"
+          rows="6"
+          placeholder="data"
+          name="arg"
+        ></textarea>
+        <!-- <footer class="box-v">
+          <button type="submit" title="Envoyer la boite (Ctrl+Enter)" class="icon">
+            📢 Add
+          </button>
+        </footer> -->
+      </form>
+    </div>
+    <section id="structure">
+      <div class="section-header">Monitoring outgoing</div>
+      <section id="monitoring_outgoing" class="monitoring"></section>
+    </section>
+  </div>
+</main>
+<div id="alert"></div>
+<div class="subtitles-menu draggable" style="display: none; resize: both;">
+  <div class="editor-buttons subtitles-style">
+    <!-- <button onclick="importTranslation()" style="margin: 0px;">Import translation</button> -->
+  </div>
+  <div id="subtitles-control">
+      <button id="subtitles__prev" class="icon">⬅️</button>
+      <p id="line">Subtitle lines</p>
+      <button id="subtitles__next" class="icon">➡️</button>
+  </div>
+  <div class="editor-buttons subtitles-content" style="margin-top: 20px;">
+
+  </div>
+</div>
+<section id="media">
+  Add media to step:
+  <!-- <div class="media_cat">
+  <i title="styles css">🗛</i>
+  <div class="media_styles"></div>
+  </div>
+  <div class="media_cat">
+    <i title="decors css">🌈</i>
+    <div class="media_decors"></div>
+  </div> -->
+  <!-- <div class="media_cat">
+  <i title="pages iframe">🌐</i>
+  <div class="media_pages"></div>
+  </div> -->
+  <!-- <div class="media_cat">
+    <i title="pages iframe">🌐</i>
+    <div class="media_layouts"></div>
+    </div> -->
+  <div class="media_cat">
+    <p title="videos">VIDEO<span>&#8964;</span></p>
+    <div class="media_video" style="display: none"></div>
+  </div>
+  <div class="media_cat">
+    <p title="audio">AUDIO<span>&#8964;</span></p>
+    <div class="media_audio" style="display: none"></div>
+  </div>
+  <div class="media_cat">
+    <p title="gifs">GIF<span>&#8964;</span></p>
+    <div class="media_gifs" style="display: none"></div>
+  </div>
+  <div class="media_cat">
+    <p title="images">IMAGE<span>&#8964;</span></p>
+    <div class="media_images" id="media_images" style="display: none"></div>
+  </div>
+  <div class="media_cat">
+    <p title="images">QR CODE<span>&#8964;</span></p>
+    <div class="media_images" id="media_QRcodes" style="display: none"></div>
+  </div>
+  <div class="menu-item video-options">
+    <select name="" id="camera-select" class="custom-select"></select>
+  </div>
+  <hr>
+  <div>
+    <textarea class="menu-item" rows="4" id="text-content" placeholder="add text content to step"></textarea>
+    <button onclick="addText()">Add text</button>
+  </div>
+  <hr>
+  <button class="menu-item" onclick="addAvatars()">Add avatars</button>
+  <hr>
+  <div class="menu-item">
+    <p>Create QR code:</p>
+    <form id="create-QRcode">
+      <label>
+        Filename
+        <input id="fileName" name='fileName' required oninput="this.value = this.value.replace(/[^a-zA-Z0-9 -]/g, '')">
+      </label>
+      <label for="fileName" class="opacity-label">.png</label><br>
+      <label>
+        Content
+        <input id="content" name='content' required>
+      </label><br>
+      <small>* content displayed when QR code is scanned</small>
+    </form>
+    <button type='file' onclick="createQRcode()">Create</button>
+  </div>
+  <hr>
+  <div class="menu-item osc-message">
+    <p>Send OSC message in this step:</p>
+    <form id="oscMessageForm" onsubmit="createOSCMessage(event)">
+      <label>
+        IP address
+        <input id="IPaddress" name='IPaddress' required oninput="this.value = this.value.replace(/[^0-9.]/g, '')">
+      </label>
+      <label>
+        Port
+        <input id="port" name='port' required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+      </label><br>
+      <label>
+        Address
+        <input id="address" name='address' required oninput="this.value = moderateOSCAddressInput(this.value)">
+      </label>
+      <label>
+        Message
+        <input id="message" name='message' required>
+      </label><br>
+      <button type='submit'>Add</button>
+      <button type='submit' class="testOSCMessage">Test</button>
+    </form>
+    <button type='button' id='getDeviceList' onclick="listAllConnectedDevices()">Show/refresh connected devices</button>
+  </div>
+  <hr>
+</section>
+
+<!-- <button id="send" style="position: absolute; top: 0%;">Send Message</button>
+
+<script type="text/javascript">
+  var osc = new OSC();
+  osc.open(); // connect by default to ws://localhost:8080
+
+  document.getElementById('send').addEventListener('click', () => {
+    var message = new OSC.Message('/test/random', Math.random());
+    osc.send(message);
+  });
+</script> -->
+
+<script src="./js/common.js?v=1.0"></script>
+
+<script src="./js/iso.js?v=1.0"></script>
+<!-- <script src="./js/boites_screen.js"></script>  -->
+<script src="./js/boites_mobile.js?v=1.0"></script> 
+<script src="./js/boites_master.js?v=1.0"></script>
+<script src="./js/modes.js?v=1.0"></script>
+<script src="./js/editor.js?v=1.0"></script>
+
+<script src='./listcomponent/Draggable.min.js'></script>
+<script src='./listcomponent/TweenMax.min.js'></script>
+<script  src="./listcomponent/script.js"></script>
+
+</body>

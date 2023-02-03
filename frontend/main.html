@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="/css/common.css" />
+<!-- <link rel="stylesheet" href="/css/main.css" /> -->
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/lib/jquery.min.js"></script>
+<script src="/js/lib/howler.min.js"></script>
+
+
+<title>MAIN</title>
+
+<style>
+  /* html {
+    background-color: #222;
+  }
+  iframe {
+    border: 2px solid #333;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 200%;
+    height: 200%;
+    transform-origin: 0 0;
+    transform: scale(0.5);
+    background: transparent;
+  } */
+</style>
+
+
+<main id="main-screen-combined" style="padding: 0px; display: flex; flex-direction: column; align-items: center; background-color: black;">
+    <section id="screen" style="width: 100%; height: 100%; box-sizing: border-box; z-index: 100; margin: auto;">
+      <iframe src="/screen" style="width:100%; height: 100%; border: none;"></iframe>
+    </section>
+    <div class = "subtitles" style="display: none;"></div>
+    </main>
+<!-- <main style="background-color: black;">
+
+    
+  <div class="box-debug box-fit box-h" style="height:auto">
+    <div class="box-v">
+      <section><iframe src="/console"></iframe></section>
+      <section><iframe src="/screen"></iframe></section>
+      <section><iframe src="/emo"></iframe></section>
+    </div>
+   
+
+</div>
+</main> -->
+<script src="/js/main.js"></script>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+/>
+<meta name="theme-color" content="#333333" />
+<meta name="msapplication-navbutton-color" content="#333333" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<link rel="manifest" href="/static/manifest.json" />
+<link rel="icon" sizes="32x32" href="/static/icon.png" />
+<link rel="apple-touch-startup-image" href="/static/icon.png" />
+<link rel="stylesheet" href="/css/common.css?v=1.0" />
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/lib/jquery.min.js"></script>
+<script src="/js/lib/howler.min.js"></script>
+
+<title>SCREENAGERS</title>
+
+<link rel="stylesheet" href="/css/mobile.css?v=1.0" />
+<script src="/js/lib/load-image.all.min.js"></script>
+<script src="/js/lib/jquery.pep.min.js"></script>
+
+<body id="mobile" style="background: black">
+  <div class="box-mobile box-fit box-h">
+    <header>
+      <div id="header" style="display:none">
+        <span id="nick"></span>
+        <span id="online"></span>
+      </div>
+    </header>
+
+    <section id="avertissement" class="box-center" style="display:none">
+      <div>
+        <span>Vous êtes arrivés au bon endroit !</span>
+        <br />
+        <span>La pièce va bientôt commencer...</span>
+      </div>
+    </section>
+
+    <section id="fin" class="box-center" style="display:none">
+      <strong style="font-size: 400%">
+        <span>FIN</span>
+      </strong>
+    </section>
+
+    <section id="attente" class="box-center" style="display:none">
+      <div>
+        <span>Vous allez pouvoir interagir avec votre téléphone très prochainement</span>
+        <br />
+        <br />
+        <img
+          class="emoji emoji--big"
+          draggable="false"
+          alt="📱"
+          src="/fonts/emoji/1f4f1.svg"
+        />
+      </div>
+    </section>
+
+    <section id="no_phone" class="box-center" style="display:none">
+      <div>
+        <span>Vous pouvez ranger votre téléphone pour le moment</span>
+        <br /><br />
+        <span>Sortez-le et revenez ici</span>
+        <br />
+        <span>lorsque cette icone apparaîtra</span>
+        <br />
+        <span>sur l'écran</span>
+        <br />
+        <img
+          class="emoji emoji--big"
+          draggable="false"
+          alt="📱"
+          src="/fonts/emoji/1f4f1.svg"
+        />
+      </div>
+    </section>
+
+    <section id="chat" style="display:none">
+      <div class="chat_blank"></div>
+    </section>
+
+    <section id="choix" class="box-center box-full" style="display:none">
+      <div id="choix_content"></div>
+    </section>
+
+    <section id="image" class="box-full" style="display:none">
+      <input
+        name="image_upload"
+        id="image_upload"
+        type="file"
+        accept="image/*"
+        _capture="user"
+      />
+
+      <div class="box-fit box-center">
+        <img id="image_output" src="" />
+      </div>
+
+      <div id="image_check_icon" style="display: none;" class="box-fit box-center">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path fill="green" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+        </svg>
+      </div>
+
+      <label id="image_photo_icon" for="image_upload" class="box-fit box-center">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 20">
+          <path
+            fill="#fff"
+            d="M13.822 4.668H7.14l-1.068-1.09a1.068 1.068 0 0 0-.663-.278H3.531c-.214 0-.51.128-.656.285L1.276 5.296c-.146.157-.266.46-.266.675v1.06l-.001.003v6.983c0 .646.524 1.17 1.17 1.17h11.643a1.17 1.17 0 0 0 1.17-1.17v-8.18a1.17 1.17 0 0 0-1.17-1.169zm-5.982 8.63a3.395 3.395 0 1 1 0-6.79 3.395 3.395 0 0 1 0 6.79zm0-5.787a2.392 2.392 0 1 0 0 4.784 2.392 2.392 0 0 0 0-4.784z"
+          ></path>
+        </svg>
+        <button><span>Envoyer une photo</span></button>
+      </label>
+    </section>
+
+    <section id="singe_savant" class="box-full box-center" style="display:none">
+      <div>
+        <div id="no_now"><span>C'est (peut-être) bientôt</span><br /><span>votre tour d'écrire</span></div>
+        <div id="keyboard" style="display:none"></div>
+        <div id="key"></div>
+      </div>
+    </section>
+
+    <section id="collective_song" class="box-full box-center" style="display:none">
+    </section>
+
+    <section id="gifs" class="box-full box-h _box-center" style="display:none">
+      <div class="box-center">
+        <img id="send_gif"/>
+      </div>
+      <footer class="box-h" id="gifs-controls">
+        <button id="gifs__teleportation"><span>téléportation</span></button>
+        <button id="gifs__tonus"><span>tonus</span></button>
+        <button id="gifs__glissade"><span>glissade</span></button>
+      </footer>
+    </section>
+
+    <section id="gamepad" class="box-full box-center" style="display:none">
+      <div>
+        <div class="gamepad__cross box-pass">
+          <button id="up">↑</button>
+          <button id="left">←</button><button id="right">→</button>
+          <button id="down">↓</button>
+        </div>
+        <div class="gamepad__buttons box-pass">
+          <button id="a">A</button><button class="hide" id="b">B</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="musique" class="box-full box-center" style="display:none; padding:0">
+      <div>
+        <img
+          id="speaker"
+          style="width:100vw;max-height:100vh;opacity:0.6;zoom:0.97;"
+          src="/static/speaker.svg"
+          alt=""
+        />
+      </div>
+    </section>
+
+    <section id="alert" class="box-center box-full" style="display:none"></section>
+
+    <footer>
+      <div id="footer" style="display:none">
+        <form autocomplete="off" id="sendMsgForm">
+          <input autocomplete="off" name="hidden" type="text" style="display:none" />
+          <div id="messagebox" class="_box-v">
+            <input autocomplete="off" id="input__message" />
+            <button class="box-min no_btn">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path
+                  fill="#fff"
+                  d="M1.101 21.757L23.8 12.028 1.101 2.3l.011 7.912 13.623 1.816-13.623 1.817-.011 7.912z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </footer>
+  </div>
+</body>
+
+<script src="/js/common.js?v=1.0"></script>
+<script src="/js/iso.js?v=1.0"></script>
+<script src="/js/bot.js?v=1.0"></script>
+<script src="/js/boites_mobile.js?v=1.0"></script>
+<script src="/js/mobile.js?v=1.0"></script>

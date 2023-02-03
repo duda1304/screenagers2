@@ -1,0 +1,178 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="svg313" fill-rule="evenodd" clip-rule="evenodd" image-rendering="optimizeQuality" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" version="1.1" viewBox="0 0 9028 13889" xml:space="preserve">
+  <defs id="defs147">
+    <linearGradient id="id0" x1="504.26" x2="504.26" y1="428.75" y2="606.08" gradientUnits="userSpaceOnUse">
+      <stop id="stop4" offset="0" stop-color="#fefefe"/>
+      <stop id="stop6" offset="1" stop-color="#282828"/>
+    </linearGradient>
+    <linearGradient id="id1" x1="504.57" x2="504.57" y1="13307.7" y2="13475.1" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id2" x1="8527.21" x2="8527.21" y1="13268" y2="13435.7" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id3" x1="8564.17" x2="8564.17" y1="369.21" y2="546.37" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id4" x1="3369.5" x2="3369.5" y1="4438.53" y2="4668.91" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id5" x1="3456.01" x2="3456.01" y1="2410.99" y2="2655.08" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id6" x1="5480.02" x2="5480.02" y1="2355.53" y2="2599.31" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id7" x1="5554.53" x2="5554.53" y1="4524.76" y2="4755.49" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id8" x1="4508.2" x2="4508.2" y1="1675.38" y2="5439.53" gradientUnits="userSpaceOnUse">
+      <stop id="stop16" offset="0" stop-color="#eee"/>
+      <stop id="stop18" offset="1" stop-color="#353636"/>
+    </linearGradient>
+    <linearGradient id="id9" x1="1503.04" x2="1503.04" y1="9459.46" y2="9793.41" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id10" x1="4482.56" x2="4482.56" y1="12495.7" y2="12830" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id11" x1="4482.56" x2="4482.56" y1="6415.1" y2="6749.41" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id12" x1="7517.37" x2="7517.37" y1="9459.46" y2="9793.41" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id13" x1="4498.72" x2="4498.72" y1="2569.89" y2="4547.64" gradientTransform="translate(-2892.5 235.42)" gradientUnits="userSpaceOnUse">
+      <stop id="stop25" offset="0" stop-color="#353636"/>
+      <stop id="stop27" offset="1" stop-color="#282828"/>
+    </linearGradient>
+    <linearGradient id="id14" x1="4495.72" x2="4495.72" y1="6259.28" y2="12976.3" gradientUnits="userSpaceOnUse" xlink:href="#id8"/>
+    <linearGradient id="id15" x1="4530.7" x2="4530.7" y1="153.99" y2="13745.4" gradientUnits="userSpaceOnUse">
+      <stop id="stop31" offset="0" stop-color="#fefefe"/>
+      <stop id="stop33" offset="1" stop-color="#353636"/>
+    </linearGradient>
+    <linearGradient id="id16" x1="2368.36" x2="2368.36" y1="7566.81" y2="7694.07" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id17" x1="2463.09" x2="2463.09" y1="11600.2" y2="11727.6" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id18" x1="6434.57" x2="6434.57" y1="7376.44" y2="7503.63" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id19" x1="6464.41" x2="6464.41" y1="11706.6" y2="11833.8" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id20" x1="2367.3" x2="2367.3" y1="7664.1" y2="7593.37" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id21" x1="2462.08" x2="2462.08" y1="11697.6" y2="11626.8" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id22" x1="3367.91" x2="3367.91" y1="4614.5" y2="4486.77" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id23" x1="6433.57" x2="6433.57" y1="7473.71" y2="7402.94" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id24" x1="6463.37" x2="6463.37" y1="11803.8" y2="11733.2" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id25" x1="502.93" x2="502.93" y1="564.31" y2="465.76" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id26" x1="503.34" x2="503.34" y1="13435.7" y2="13342.7" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id27" x1="8525.93" x2="8525.93" y1="13396.2" y2="13303.1" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id28" x1="8562.88" x2="8562.88" y1="504.64" y2="406.31" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id29" x1="1503.01" x2="1503.01" y1="9838.99" y2="9413.81" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id30" x1="4482.61" x2="4482.61" y1="12875.6" y2="12450" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id31" x1="4482.61" x2="4482.61" y1="6795.02" y2="6369.52" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id32" x1="7517.36" x2="7517.36" y1="9838.99" y2="9413.81" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id33" x1="4508.21" x2="4508.21" y1="4002.63" y2="3112.26" gradientUnits="userSpaceOnUse">
+      <stop id="stop53" offset="0" stop-color="#4f4f4f"/>
+      <stop id="stop55" offset="1" stop-color="#282828"/>
+    </linearGradient>
+    <linearGradient id="id34" x1="3369.56" x2="3369.56" y1="4700.32" y2="4407.11" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id35" x1="3455.93" x2="3455.93" y1="2688.39" y2="2377.78" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id36" x1="5480.04" x2="5480.04" y1="2632.71" y2="2322.31" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id37" x1="5554.43" x2="5554.43" y1="4786.83" y2="4493.54" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id38" x1="1500.43" x2="1500.43" y1="9714.63" y2="9529.22" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id39" x1="4480.1" x2="4480.1" y1="12751.2" y2="12565.5" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id40" x1="4480.1" x2="4480.1" y1="6670.65" y2="6484.89" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id41" x1="7514.83" x2="7514.83" y1="9714.63" y2="9529.22" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id42" x1="504.3" x2="504.3" y1="630.28" y2="404.57" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id43" x1="504.55" x2="504.55" y1="13497.9" y2="13284.9" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id44" x1="8527.17" x2="8527.17" y1="13458.4" y2="13245.3" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id45" x1="8564.17" x2="8564.17" y1="570.67" y2="345.05" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id46" x1="2368.27" x2="2368.27" y1="7711.43" y2="7549.46" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id47" x1="2463.06" x2="2463.06" y1="11744.7" y2="11582.8" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id48" x1="3454.11" x2="3454.11" y1="2597.6" y2="2461.94" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id49" x1="5478.3" x2="5478.3" y1="2541.89" y2="2406.5" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id50" x1="6434.57" x2="6434.57" y1="7521" y2="7359" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id51" x1="6464.43" x2="6464.43" y1="11851.2" y2="11689.3" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id52" x1="5552.74" x2="5552.74" y1="4701.15" y2="4573.07" gradientUnits="userSpaceOnUse" xlink:href="#id0"/>
+    <linearGradient id="id53" x1="4464.43" x2="4551.95" y1="4564.06" y2="2550.97" gradientUnits="userSpaceOnUse" xlink:href="#id63"/>
+    <linearGradient id="id54" x1="7694.69" x2="7841.22" y1="12137.6" y2="12986.5" gradientUnits="userSpaceOnUse" xlink:href="#id8"/>
+    <radialGradient id="id55" cx="4495.7" cy="12362.1" r="2744.32" fx="4495.7" fy="12362.1" gradientUnits="userSpaceOnUse">
+      <stop id="stop79" offset="0" stop-color="#7c7d7d"/>
+      <stop id="stop81" offset=".03" stop-color="#7c7d7d"/>
+      <stop id="stop83" offset=".92" stop-color="#353636"/>
+      <stop id="stop85" offset="1" stop-color="#353636"/>
+    </radialGradient>
+    <radialGradient id="id56" cx="4495.67" cy="9617.78" r="2575.26" fx="4495.67" fy="9617.78" gradientUnits="userSpaceOnUse">
+      <stop id="stop88" offset="0" stop-color="#4f4f4f"/>
+      <stop id="stop90" offset=".65" stop-color="#4f4f4f"/>
+      <stop id="stop92" offset=".71" stop-color="#282828"/>
+      <stop id="stop94" offset="1" stop-color="#282828"/>
+    </radialGradient>
+    <radialGradient id="id57" cx="1814.79" cy="3296.94" r="467.5" fx="1814.79" fy="3296.94" gradientUnits="userSpaceOnUse">
+      <stop id="stop97" offset="0" stop-color="#4f4f4f"/>
+      <stop id="stop99" offset=".68" stop-color="#4f4f4f"/>
+      <stop id="stop101" offset=".71" stop-color="#353636"/>
+      <stop id="stop103" offset="1" stop-color="#353636"/>
+    </radialGradient>
+    <radialGradient id="id58" cx="7043.86" cy="5574.77" r="884.67" fx="7043.86" fy="5574.77" gradientUnits="userSpaceOnUse" xlink:href="#id57"/>
+    <radialGradient id="id59" cx="1814.79" cy="3296.94" r="467.5" fx="1814.79" fy="3296.94" gradientUnits="userSpaceOnUse">
+      <stop id="stop107" offset="0" stop-color="#353636"/>
+      <stop id="stop109" offset=".64" stop-color="#353636"/>
+      <stop id="stop111" offset=".68" stop-color="#4f4f4f"/>
+      <stop id="stop113" offset="1" stop-color="#4f4f4f"/>
+    </radialGradient>
+    <radialGradient id="id60" cx="7043.86" cy="5574.77" r="884.67" fx="7043.86" fy="5574.77" gradientUnits="userSpaceOnUse" xlink:href="#id59"/>
+    <radialGradient id="id61" cx="4495.67" cy="9617.78" r="2575.26" fx="4495.67" fy="9617.78" gradientUnits="userSpaceOnUse">
+      <stop id="stop117" offset="0" stop-color="#282828"/>
+      <stop id="stop119" offset=".59" stop-color="#282828"/>
+      <stop id="stop121" offset=".65" stop-color="#4f4f4f"/>
+      <stop id="stop123" offset="1" stop-color="#4f4f4f"/>
+    </radialGradient>
+    <radialGradient id="id62" cx="4495.66" cy="8613.89" r="1024.41" fx="4495.66" fy="8613.89" gradientUnits="userSpaceOnUse">
+      <stop id="stop126" offset="0" stop-color="#8b8b8b"/>
+      <stop id="stop128" offset="1" stop-color="#323333"/>
+    </radialGradient>
+    <radialGradient id="id63" cx="4574.39" cy="10758.5" r="1612.71" fx="4574.39" fy="10758.5" gradientUnits="userSpaceOnUse">
+      <stop id="stop131" offset="0" stop-color="#bcbdbd"/>
+      <stop id="stop133" offset="1" stop-color="#282828"/>
+    </radialGradient>
+    <radialGradient id="id64" cx="4495.72" cy="10815.3" r="958.04" fx="4495.72" fy="10815.3" gradientUnits="userSpaceOnUse">
+      <stop id="stop136" offset="0" stop-color="#7c7d7d"/>
+      <stop id="stop138" offset="1" stop-color="#282828"/>
+    </radialGradient>
+    <radialGradient id="id65" cx="4500.17" cy="3317.33" r="216.1" fx="4500.17" fy="3317.33" gradientUnits="userSpaceOnUse" xlink:href="#id64"/>
+    <radialGradient id="id66" cx="4458.19" cy="9242.64" r="431.41" fx="4458.19" fy="9242.64" gradientUnits="userSpaceOnUse">
+      <stop id="stop142" offset="0" stop-color="#fefefe"/>
+      <stop id="stop144" offset="1" stop-color="#282828"/>
+    </radialGradient>
+  </defs>
+  <g id="Layer_x0020_1">
+    <path id="path154" fill="#2e2e2e" fill-rule="nonzero" d="M4496 7043c-1422 0-2575 1153-2575 2575s1153 2575 2575 2575 2575-1153 2575-2575-1153-2575-2575-2575z"/>
+    <path id="path156" d="M7899 9618c0 1880-1524 3404-3404 3404s-3404-1524-3404-3404 1524-3404 3404-3404 3404 1524 3404 3404z" class="fil0"/>
+    <path id="path158" fill="url(#id14)" d="M7854 9618c0 1855-1504 3358-3359 3358s-3358-1504-3358-3358c0-1855 1504-3359 3358-3359 1855 0 3359 1504 3359 3359z"/>
+    <path id="path160" fill="url(#id55)" d="M7240 9618c0 1516-1229 2744-2744 2744-1516 0-2744-1229-2744-2744 0-1516 1229-2744 2744-2744 1516 0 2744 1229 2744 2744z"/>
+    <path id="path162" fill="url(#id56)" d="M4496 7043c-1422 0-2575 1153-2575 2575s1153 2575 2575 2575 2575-1153 2575-2575-1153-2575-2575-2575z"/>
+    <path id="path164" fill="url(#id61)" d="M4496 7043c-1422 0-2575 1153-2575 2575s1153 2575 2575 2575 2575-1153 2575-2575-1153-2575-2575-2575z"/>
+    <path id="path166" fill="#363736" fill-rule="nonzero" d="M6631 9618c0 1179-956 2136-2136 2136s-2136-956-2136-2136c0-1179 956-2136 2136-2136s2136 956 2136 2136z"/>
+    <path id="path168" fill="#4f4f4f" fill-rule="nonzero" d="M6547 9618c0 1133-918 2051-2051 2051s-2051-918-2051-2051 918-2051 2051-2051 2051 919 2051 2051z"/>
+    <path id="path170" fill="url(#id63)" d="M6462 9618c0 1086-881 1967-1967 1967s-1967-881-1967-1967 881-1967 1967-1967 1967 881 1967 1967z"/>
+    <path id="path172" fill="url(#id64)" d="M5693 9618c0 661-536 1198-1198 1198-661 0-1197-536-1197-1198 0-661 536-1198 1197-1198s1198 536 1198 1198z"/>
+    <path id="path174" fill="url(#id62)" d="M5520 9618c0 566-459 1024-1024 1024-566 0-1024-459-1024-1024 0-566 459-1024 1024-1024 566 0 1024 459 1024 1024z"/>
+    <path id="path176" fill="url(#id66)" d="M5433 9618c0 518-420 938-938 938s-938-420-938-938 420-938 938-938 938 420 938 938z"/>
+    <path id="path178" fill="url(#id31)" d="M4692 6582c0 117-94 213-209 213s-209-95-209-213 94-213 209-213 209 95 209 213z"/>
+    <path id="path180" fill="url(#id11)" d="M4647 6582c0 92-73 167-164 167s-164-75-164-167 74-167 164-167c91 0 164 75 164 167z"/>
+    <path id="polygon182" fill="url(#id40)" d="M4571 6564h-77v-79h-28v79h-77v28h77v79h28v-79h77z"/>
+    <path id="path184" fill="url(#id30)" d="M4692 12663c0 117-94 213-209 213s-209-95-209-213c0-117 94-213 209-213s209 95 209 213z"/>
+    <path id="path186" fill="url(#id10)" d="M4647 12663c0 92-73 167-164 167s-164-75-164-167 74-167 164-167c91 0 164 75 164 167z"/>
+    <path id="polygon188" fill="url(#id39)" d="M4571 12644h-77v-79h-28v79h-77v28h77v79h28v-79h77z"/>
+    <path id="path190" fill="url(#id29)" d="M1712 9626c0 117-94 213-209 213s-209-95-209-213c0-117 94-213 209-213s209 95 209 213z"/>
+    <path id="path192" fill="url(#id9)" d="M1667 9626c0 92-74 167-164 167-91 0-164-75-164-167s74-167 164-167c91 0 164 75 164 167z"/>
+    <path id="polygon194" fill="url(#id38)" d="M1592 9608h-78v-79h-27v79h-78v28h78v79h27v-79h78z"/>
+    <path id="path196" fill="url(#id46)" d="M2448 7630c0 45-36 81-80 81s-80-36-80-81 36-81 80-81 80 36 80 81z"/>
+    <path id="path198" fill="url(#id16)" d="M2431 7630c0 35-28 64-63 64s-62-29-62-64 28-64 62-64c35 0 63 29 63 64z"/>
+    <path id="polygon200" fill="url(#id20)" d="M2402 7624h-29v-31h-11v31h-30v10h30v30h11v-30h29z"/>
+    <path id="path202" fill="url(#id47)" d="M2543 11664c0 45-36 81-80 81s-80-36-80-81 36-81 80-81 80 36 80 81z"/>
+    <path id="path204" fill="url(#id17)" d="M2526 11664c0 35-28 64-63 64s-63-29-63-64 28-64 63-64c34 0 63 29 63 64z"/>
+    <path id="polygon206" fill="url(#id21)" d="M2497 11657h-30v-30h-10v30h-30v10h30v31h10v-31h30z"/>
+    <path id="path208" fill="url(#id51)" d="M6544 11770c0 45-36 81-80 81s-80-36-80-81 36-81 80-81 80 36 80 81z"/>
+    <path id="path210" fill="url(#id19)" d="M6527 11770c0 35-28 64-62 64-35 0-63-29-63-64s28-64 63-64c34 0 62 29 62 64z"/>
+    <path id="polygon212" fill="url(#id24)" d="M6498 11763h-29v-30h-11v30h-29v11h29v30h11v-30h29z"/>
+    <path id="path214" fill="url(#id50)" d="M6514 7440c0 45-36 81-80 81s-80-36-80-81 36-81 80-81 80 36 80 81z"/>
+    <path id="path216" fill="url(#id18)" d="M6497 7440c0 35-28 64-63 64-34 0-62-29-62-64s28-64 62-64c35 0 63 29 63 64z"/>
+    <path id="polygon218" fill="url(#id23)" d="M6468 7433h-29v-30h-11v30h-29v11h29v30h11v-30h29z"/>
+    <path id="path220" fill="url(#id32)" d="M7726 9626c0 117-94 213-209 213s-209-95-209-213c0-117 94-213 209-213s209 95 209 213z"/>
+    <path id="path222" fill="url(#id12)" d="M7682 9626c0 92-74 167-164 167-91 0-164-75-164-167s74-167 164-167c91 0 164 75 164 167z"/>
+    <path id="polygon224" fill="url(#id41)" d="M7606 9608h-78v-79h-27v79h-77v28h77v79h27v-79h78z"/>
+    <path id="path226" d="M6435 3557c0 1064-863 1927-1927 1927s-1927-863-1927-1927 863-1927 1927-1927 1927 863 1927 1927z" class="fil0"/>
+    <path id="path228" fill="url(#id8)" d="M6390 3557c0 1039-843 1882-1882 1882s-1882-843-1882-1882 843-1882 1882-1882 1882 843 1882 1882z"/>
+    <path id="path230" fill="url(#id35)" d="M3608 2533c0 86-68 155-153 155-84 0-153-70-153-155 0-86 68-155 153-155 84 0 153 70 153 155z"/>
+    <path id="path232" fill="url(#id5)" d="M3576 2533c0 67-54 122-120 122s-120-55-120-122 54-122 120-122 120 55 120 122z"/>
+    <path id="polygon234" fill="url(#id48)" d="M3521 2520h-57v-58h-20v58h-56v20h56v58h20v-58h57z"/>
+    <path id="path236" fill="url(#id37)" d="M5699 4640c0 81-65 147-144 147-80 0-144-66-144-147s65-147 144-147c80 0 144 66 144 147z"/>
+    <path id="path238" fill="url(#id7)" d="M5668 4640c0 64-51 115-113 115-63 0-113-52-113-115 0-64 51-115 113-115s113 52 113 115z"/>
+    <path id="polygon240" fill="url(#id52)" d="M5616 4627h-54v-54h-19v54h-53v20h53v54h19v-54h54z"/>
+    <path id="path242" fill="url(#id34)" d="M3514 4554c0 81-65 147-144 147s-144-66-144-147 65-147 144-147c80 0 144 66 144 147z"/>
+    <path id="path244" fill="url(#id4)" d="M3483 4554c0 63-51 115-113 115s-113-52-113-115c0-64 51-115 113-115 63 0 113 52 113 115z"/>
+    <path id="polygon246" fill="url(#id22)" d="M3431 4541h-54v-54h-19v54h-53v19h53v55h19v-55h54z"/>
+    <path id="path248" fill="url(#id36)" d="M5633 2477c0 86-69 155-153 155s-153-69-153-155 68-155 153-155c84 0 153 69 153 155z"/>
+    <path id="path250" fill="url(#id6)" d="M5600 2477c0 67-54 122-120 122s-120-54-120-122c0-67 54-122 120-122s120 55 120 122z"/>
+    <path id="polygon252" fill="url(#id49)" d="M5545 2464h-57v-57h-20v57h-56v20h56v58h20v-58h57z"/>
+    <path id="path256" fill="url(#id33)" d="M4953 3557c0 246-199 445-445 445s-445-199-445-445 199-445 445-445 445 199 445 445z"/>
+    <path id="path254" fill="url(#id53)" fill-opacity="1" stroke="#000" stroke-dasharray="none" stroke-miterlimit="4" stroke-opacity="1" stroke-width="39.58" d="M5494 3557c0 545-441 986-986 986s-986-442-986-986c0-545 442-986 986-986 545 0 986 442 986 986z"/>
+    <path id="path258" fill="url(#id65)" d="M4908 3557c0 221-179 400-400 400s-400-179-400-400 179-400 400-400 400 179 400 400z"/>
+  </g>
+</svg>

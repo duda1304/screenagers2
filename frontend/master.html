@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<!-- <meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+/> -->
+<meta name="theme-color" content="#333333" />
+<meta name="msapplication-navbutton-color" content="#333333" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<link rel="manifest" href="./static/manifest.json" />
+<link rel="icon" sizes="32x32" href="./static/icon.png" />
+<link rel="apple-touch-startup-image" href="./static/icon.png" />
+<link rel="stylesheet" href="./css/common.css?v=1.0" />
+<script src="./socket.io/socket.io.js"></script>
+<script src="./js/lib/jquery.min.js"></script>
+<script src="./js/lib/howler.min.js"></script>
+<script src="./js/lib/twemoji.min.js"></script>
+<link rel="stylesheet" href="./js/lib/jquery-ui-1.13.2/jquery-ui.min.css" />
+<script src="./js/lib/jquery-ui-1.13.2/jquery-ui.min.js"></script>
+
+<title>🎛️ MASTER</title>
+
+<link rel="stylesheet" href="./data/decors.css?v=1.0" />
+
+<link rel="stylesheet" href="./js/lib/spectrum.css" />
+<script src="./js/lib/spectrum.min.js"></script>
+
+<link rel="stylesheet" href="./js/lib/jquery-ui.min.css" />
+<script src="./js/lib/jquery-ui.min.js"></script>
+
+<script src="./js/lib/mousetrap.min.js"></script>
+<script src="./js/lib/jquery.scrollTo.min.js"></script>
+
+<script src="./js/constants.js"></script>
+
+<!-- <script src="./js/lib/html5-qrcode.min.js"></script> -->
+
+<link rel="stylesheet" href="./css/master.css?v=1.0" />
+<link rel="stylesheet" href="./css/editor.css" />
+
+<main id="master">
+  <div class="box box-debug closed draggable">
+    <b>debug</b>
+    <div id="debug"></div>
+  </div>
+  <div class="box box-tools closed draggable">
+    <b>tools</b>
+    <div id="tools"></div>
+  </div>
+  <div class="box box-emojis closed draggable resizable hide">
+    <b>emojis</b>
+    <div id="emojis"></div>
+  </div>
+  <div class="box box-users closed draggable resizable">
+    <b>users</b>
+    <div class="_hide  box-random-users">
+      <input
+        title="Nombre d'utilisateurs tirés au sort"
+        id="number_random_users"
+        type="number"
+        min="0"
+        value="1"
+      />
+      <button id="select_random_users" class="icon box-min">🎲</button>
+    </div>
+    <div class="users_container">
+      <table class="table-users">
+        <thead>
+          <th><input checked id="users_check_all" type="checkbox" /></th>
+          <th></th>
+          <th>pseudo</th>
+          <th>karma</th>
+        </thead>
+        <tbody id="users"></tbody>
+      </table>
+    </div>
+    <div id="users_stats">
+      <span id="nb_users_inscrits">0</span> registered /
+      <span id="nb_users_connectes">0</span> connected
+    </div>
+    <div id="reponses" class="box-wrap"></div>
+    <select id="select-saved-response"></select>
+    <div>
+      <form id="interactions">
+        <div class="">
+          <div style="position: relative;">
+          <textarea
+            cols="44"
+            rows="12"
+            id="one_shot__message"
+            placeholder="message"
+            name="message"
+          ></textarea>
+          <div id="image-msg-div">
+            <img id="image-msg" src=""></img>
+            <div id="remove-image" style="display: none;">x</div>
+          </div>
+          </div>
+          <button
+            type="submit"
+            title="Send message"
+            data-title="send"
+            class="icon"
+          >
+            📩
+          </button>
+          <div style="display:flex; flex-direction: row; align-items: center; width: 100%;">
+            <button
+              type="submit"
+              title="Save message"
+              data-title="save"
+              class="icon"
+            >
+              Save message
+            </button>
+            <button
+              type="submit"
+              title="Delete message"
+              data-title="delete"
+              class="icon"
+            >
+              Delete message
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="box box-visual closed draggable resizable">
+    <b>visual</b>
+    <div id="visual"></div>
+    <div>
+      <div class="play-steps">
+        <button id="visual__prev" class="icon">⬅️</button>
+        <button id="visual__next" class="icon">➡️</button>
+      </div>
+      <select id="select-next-scene">
+      </select>
+    </div>
+  </div>
+  <div class="box box-preview closed draggable resizable">
+    <b>preview</b>
+    <div class="section-header screens" style="width: 50%; padding: 5px; background-color: transparent;">
+      <div class="active" style="margin-right: 10px;">Screen</div>
+      <div>Laptop</div>
+    </div>
+    <div id="preview_div">
+      <div id="screenCurrent" class="preview">
+        <div class="step" style="background-color: rgb(0, 0, 0);">
+          <div class="step__decor"></div>
+          <div class="step__texte"></div>
+          <div id="boite" class="" style="display: none;"></div>
+        </div>
+      </div>
+      <div id="laptopCurrent" class="preview" style="display:none;">
+        <div class="step" style="background-color: rgb(0, 0, 0);">
+          <div class="step__decor"></div>
+          <div class="step__texte"></div>
+          <div id="boite" class="" style="display: none;"></div>
+        </div>
+      </div>
+      <div id="screenNext" class="preview next">
+        <div class="step" style="background-color: rgb(0, 0, 0);">
+          <div class="step__decor"></div>
+          <div class="step__texte"></div>
+          <div id="boite" class="" style="display: none;"></div>
+        </div>
+      </div>
+      <div id="laptopNext" class="preview next" style="display:none;">
+        <div class="step" style="background-color: rgb(0, 0, 0);">
+          <div class="step__decor"></div>
+          <div class="step__texte"></div>
+          <div id="boite" class="" style="display: none;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="box box-monitoring_incoming closed draggable resizable">
+    <b>monitoring incoming</b>
+    <div id="monitoring_incoming"></div>
+  </div>
+  <div class="box box-monitoring_outgoing closed draggable resizable">
+    <b>monitoring outgoing</b>
+    <div id="monitoring_outgoing"></div>
+  </div>
+  <div class="box box-boites closed draggable">
+    <b>states</b>
+    <form id="boite">
+      <div class=" box-boites-type">
+        <div id="boites_types" class=" box-wrap"></div>
+      </div>
+    </form>
+  </div>
+  <div class="box box-osc hide draggable resizable">
+    <b>osc</b>
+    <form id="osc">
+      <div class="">
+        <input
+          type="number"
+          name="message"
+          placeholder="preset number (0 = Noir)"
+        />
+        <div class="">
+          <button
+            type="submit"
+            title="Envoyer le message OSC (Ctrl+Enter)"
+            class="icon"
+          >
+            📢
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="box box-audio_video_control closed draggable">
+      <b>audio/video control</b>
+      <div>
+    <button class="repet__rewind icon box-min">⏪</button>
+    <button class="repet__pause toggle icon box-min">⏸️</button>
+    <button class="repet__forward icon box-min">⏩</button>
+    <input
+      style="width:150px"
+      min="0"
+      max="59"
+      id="repet__min"
+      type="number"
+      class="box-min"
+      placeholder="minutes"
+    />
+  </div>
+  </div>
+</main>
+
+<!-- <div id="QR_modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeQRmodal()">&times;</span>
+    <div class="display-cover">
+      <video id="stream" autoplay></video>
+      <div class="video-options">
+          <select name="" id="" class="custom-select"><option value="">Select camera</option></select>
+      </div>
+      <div class="controls d-none">
+          <button class="play streamControl" title="Play">&gt;</button>
+          <button class="pause d-none streamControl" title="Pause">||</button>
+      </div>
+    </div>
+      <button onclick="readCode()">Save scene layout</button>
+  </div>
+</div> -->
+
+<script src="./js/common.js?v=1.0"></script>
+<script>
+  cat = 'master';
+  const page = 'master';
+</script>
+<script src="./js/iso.js?v=1.0"></script>
+<script src="./js/boites_mobile.js?v=1.0"></script>
+<script src="./js/boites_master.js?v=1.0"></script>
+<script src="./js/modes.js?v=1.0"></script>
+<script src="./js/master.js"></script>

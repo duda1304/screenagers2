@@ -1,0 +1,29 @@
+{
+  "name": "node_shell",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "nodemon -w backend -w frontend/js/iso.js -w server.js server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "a2r-osc": "0.0.1",
+    "basic-auth": "^2.0.1",
+    "express": "^4.16.4",
+    "fs-extra": "^11.1.0",
+    "gh-pages": "^3.2.3",
+    "local-devices": "^4.0.0",
+    "node-osc": "^8.0.8",
+    "node-xlsx": "^0.15.0",
+    "qr-scanner": "^1.4.1",
+    "qrcode": "^1.5.0",
+    "reset-image-orientation": "^2.0.1",
+    "socket.io": "^2.2.0"
+  },
+  "devDependencies": {
+    "compress-images": "^1.5.8"
+  }
+}

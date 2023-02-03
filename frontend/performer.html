@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+/>
+<meta name="theme-color" content="#333333" />
+<meta name="msapplication-navbutton-color" content="#333333" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<link rel="manifest" href="/static/manifest.json" />
+<link rel="icon" sizes="32x32" href="/static/icon.png" />
+<link rel="apple-touch-startup-image" href="/static/icon.png" />
+<link rel="stylesheet" href="/css/common.css?v=1.0" />
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/lib/jquery.min.js"></script>
+<script src="/js/lib/howler.min.js"></script>
+<script src="/js/lib/twemoji.min.js"></script>
+
+<title>🎛️ PERFORMER</title>
+
+<link rel="stylesheet" href="/data/decors.css?v=1.0" />
+
+<link rel="stylesheet" href="/js/lib/spectrum.css" />
+<script src="/js/lib/spectrum.min.js"></script>
+
+<link rel="stylesheet" href="/js/lib/jquery-ui.min.css" />
+<script src="/js/lib/jquery-ui.min.js"></script>
+
+<script src="/js/lib/mousetrap.min.js"></script>
+<script src="/js/lib/jquery.scrollTo.min.js"></script>
+
+<link rel="stylesheet" href="/css/master.css?v=1.0" />
+
+<main id="master" class="gradient">
+  <div class="box-h box-fit">
+    <div class="box-v">
+      <div class="box-h">
+        <div class="box-v">
+          <div class="box-h">
+            <header class="box-h box-debug closed">
+              <b>debug</b>
+              <div id="debug"></div>
+            </header>
+            <header class="box-h box-tools _closed">
+              <b>tools</b>
+              <div id="tools"></div>
+            </header>
+              <div class="box-h box-users closed">
+                <b>users</b>
+                <header class="_hide box-v box-random-users">
+                  <input
+                    title="Nombre d'utilisateurs tirés au sort"
+                    id="number_random_users"
+                    type="number"
+                    min="0"
+                    value="1"
+                  />
+                  <button id="select_random_users" class="icon box-min">🎲</button>
+                </header>
+                <div class="users_container">
+                  <table class="table-users">
+                    <thead>
+                      <th><input checked id="users_check_all" type="checkbox" /></th>
+                      <th></th>
+                      <th>pseudo</th>
+                      <th>karma</th>
+                    </thead>
+                    <tbody id="users"></tbody>
+                  </table>
+                </div>
+                <header id="users_stats">
+                  <span id="nb_users_inscrits">0</span> registered /
+                  <span id="nb_users_connectes">0</span> connected
+                </header>
+                <footer id="reponses" class="box-v box-wrap"></footer>
+                <footer>
+                  <form id="interactions">
+                    <div class="box-h">
+                      <textarea
+                        cols="44"
+                        rows="3"
+                        id="one_shot__message"
+                        placeholder="message"
+                        name="message"
+                      ></textarea>
+                      <button
+                        type="submit"
+                        title="Envoyer le message (Ctrl+Enter)"
+                        class="icon"
+                      >
+                        📩
+                      </button>
+                    </div>
+                  </form>
+                </footer>
+              </div>
+              <footer class="box-h box-osc hide">
+                <b>osc</b>
+                <form id="osc">
+                  <div class="box-h">
+                    <input
+                      type="number"
+                      name="message"
+                      placeholder="preset number (0 = Noir)"
+                    />
+                    <div class="box-v">
+                      <button
+                        type="submit"
+                        title="Envoyer le message OSC (Ctrl+Enter)"
+                        class="icon"
+                      >
+                        📢
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </footer>
+            <div class="box-h box-media closed">
+              <b>media</b>
+              <section id="media">
+                <div class="media_cat">
+                  <i title="styles css">🗛</i>
+                  <div class="media_styles"></div>
+                </div>
+                <div class="media_cat">
+                  <i title="decors css">🌈</i>
+                  <div class="media_decors"></div>
+                </div>
+                <div class="media_cat">
+                  <i title="pages iframe">🌐</i>
+                  <div class="media_pages"></div>
+                </div>
+                <div class="media_cat">
+                  <i title="videos">📽️</i>
+                  <div class="media_video"></div>
+                </div>
+                <div class="media_cat">
+                  <i title="audio">🎧</i>
+                  <div class="media_audio"></div>
+                </div>
+                <div class="media_cat">
+                  <i title="gifs">🖼️</i>
+                  <div class="media_gifs"></div>
+                </div>
+                <div class="media_cat">
+                  <i title="images">📷</i>
+                  <div class="media_images"></div>
+                </div>
+              </section>
+            </div>
+            <footer class="box-h box-shortcuts">
+                <b>screens</b>
+                <div id="screens" class="box-v"></div>
+            </footer>
+            <footer class="box-v">
+                <button class="repet__rewind icon box-min">⏪</button>
+                <button class="repet__pause toggle icon box-min">⏸️</button>
+                <button class="repet__forward icon box-min">⏩</button>
+                <input
+                  style="width:78px"
+                  min="0"
+                  max="59"
+                  id="repet__min"
+                  type="number"
+                  class="box-min"
+                  placeholder="minutes"
+                />
+                <button class="icon" id="send_all_screens">📢</button>
+            </footer>
+          </div>
+          <div class="box-h box-monitoring" style="flex: 2 0px;">
+            <b>screen mirroring</b>
+            <section><iframe src="/main" style="width:100%; height: 100%;"></iframe></section>
+          </div>
+        </div>
+      </div>
+     
+    </div>
+  </div>
+</main>
+
+<template id="tmpl_screen__ctrl">
+    <div class="screen__ctrl">
+      <div class="box-v">
+        <input
+          autocomplete="off"
+          _list="list_decors"
+          class="color-picker _box-min"
+          type="text"
+          placeholder="decor"
+          name="decor.src"
+        />
+       
+        <input
+          style="flex: 0 0 58px"
+          type="number"
+          min="0"
+          max="100"
+          placeholder="vol."
+          title="Volume"
+          name="decor.volume"
+        />
+        <div class="button_radio box-min">
+          <label title="Lecture en boucle">
+            <input type="checkbox" name="decor.loop" />
+            <span class="icon">🔁</span>
+          </label>
+        </div>
+      </div>
+      <div class="box-v button_radio">
+        <label title="L'image ou la video recouvre tout l'écran (avec crop)">
+          <input class="radio_fit" checked type="radio" value="cover" name="decor.fit" />
+          <span>cover</span>
+        </label>
+        <label title="L'image ou la video s'affiche en entier (sans crop)">
+          <input class="radio_fit" type="radio" value="contain" name="decor.fit" />
+          <span>contain</span>
+        </label>
+      </div>
+      <div class="box-v">
+        <input
+          autocomplete="off"
+          list="list_musics"
+          type="text"
+          placeholder="music"
+          name="music.src"
+        />
+        <input
+          style="flex: 0 0 58px"
+          type="number"
+          min="0"
+          max="100"
+          placeholder="vol."
+          title="Volume"
+          name="music.volume"
+        />
+        <div class="button_radio box-min">
+          <label title="Lecture en boucle">
+            <input type="checkbox" name="music.loop" />
+            <span class="icon">🔁</span>
+          </label>
+        </div>
+      </div>
+      <div class="box-v">
+        <textarea
+          autocomplete="off"
+          cols="44"
+          rows="6"
+          placeholder="texte"
+          name="texte"
+        ></textarea>
+      </div>
+      <div class="box-v">
+        <input
+          autocomplete="off"
+          list="list_styles"
+          type="text"
+          placeholder="style"
+          name="style"
+        />
+        <input
+          autocomplete="off"
+          class="color-picker _box-min"
+          type="text"
+          placeholder="color"
+          name="color"
+        />
+      </div>
+      <div class="box-v">
+        <input
+          autocomplete="off"
+          list="list_modes"
+          type="text"
+          placeholder="mode d'affichage"
+          name="mode_aff"
+        />
+      </div>   
+    </div>
+</template>
+
+<!-- <div id="scan_modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <video id="scan-element"></video>
+</div> -->
+
+<script src="/js/common.js?v=1.0"></script>
+<script>
+  cat = 'master';
+</script>
+<script src="/js/iso.js?v=1.0"></script>
+<script src="/js/boites_mobile.js?v=1.0"></script>
+<script src="/js/boites_master.js?v=1.0"></script>
+<script src="/js/modes.js?v=1.0"></script>
+<!-- <script src="/js/master.js?v=1.0"></script> -->
+<script src="/js/performer.js?v=1.0"></script>
+
