@@ -406,12 +406,13 @@ boites.collective_song = {
       iframe.src = '/boites/gameboy/index.html?data=sm';
       iframe.onload = function() {
         game = iframe.contentWindow;
-        setTimeout(() => {
-          game.GameBoyKeyDown('start');
-          setTimeout(() => {
-            game.GameBoyKeyUp('start');
-          }, 100);
-        }, 1000);
+        // do not start game automatically but on START button in master
+        // setTimeout(() => {
+        //   game.GameBoyKeyDown('start');
+        //   setTimeout(() => {
+        //     game.GameBoyKeyUp('start');
+        //   }, 100);
+        // }, 1000);
       };
     },
     gamepad: function(key) {
