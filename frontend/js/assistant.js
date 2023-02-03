@@ -1,4 +1,4 @@
-//added comment to test pull
+//removed comment to test pull
 
 function createRandomString(length) {
     var result           = '';
