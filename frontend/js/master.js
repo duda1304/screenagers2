@@ -24,92 +24,9 @@ $(".box-preview").resizable({
   aspectRatio : true
 });
 
-// $(".box-meme").resizable({
-//   handles: "se",
-//   minWidth: 500,
-//   // aspectRatio : true
-// });
-
 
 // ACTIVATE title of elements to be shown as tooltip on hover
 // $( document ).tooltip();
-
-// const isPositiveInteger = val => val >>> 0 === parseFloat(val);
-
-// function locate(obj, path, sep = '.') {
-//   return path
-//     .split(sep)
-//     .filter(key => key !== '')
-//     .reduce((acc, key) => acc[key], obj);
-// }
-
-// function allocate(obj, path, val = null, sep = '.') {
-//   path
-//     .split(sep)
-//     .filter(key => key !== '')
-//     .reduce((acc, key, i, arr) => {
-//       acc[key] = arr.length - 1 === i ? val : acc[key] || {};
-//       return acc[key];
-//     }, obj);
-//   return obj;
-// }
-
-// allocate.json = function(obj, path, val = null, sep = '.') {
-//   path
-//     .split(sep)
-//     .filter(key => key !== '')
-//     .reduce((acc, key, i, arr) => {
-//       acc[key] =
-//         arr.length - 1 === i
-//           ? val
-//           : acc[key] || (isPositiveInteger(arr[i + 1]) ? [] : {});
-//       return acc[key];
-//     }, obj);
-//   return obj;
-// };
-
-// const getFormValues = (form, withEmpty = false) => {
-//   var data = {};
-//   [...form.elements].forEach(el => {
-//     if (el.name === '' || el.disabled) return;
-//     let val;
-//     if ('valueAsDate' in el && el.valueAsDate !== null) val = el.valueAsDate;
-//     else if (el.type === 'number') val = el.value !== '' ? Number(el.value) : '';
-//     else if (el.type === 'range') val = el.value !== '' ? Number(el.value) : '';
-//     else if (el.type === 'checkbox') val = Boolean(el.checked);
-//     else if (el.type === 'radio') {
-//       if (el.checked) val = el.value;
-//       else return;
-//     } else if (el.type === 'select-multiple') {
-//       val = [...el.options].filter(option => option.selected).map(option => option.value);
-//     } else if (withEmpty || el.value) {
-//       val = el.value;
-//     } else return;
-
-//     var name = el.name;
-//     if (name === 'mode_aff') name = 'mode';
-//     allocate(data, name, val);
-//   });
-//   return data;
-// };
-
-// const setFormValues = (form, data) => {
-//   [...form.elements].forEach(el => {
-//     var name = el.name;
-//     if (name === 'mode_aff') name = 'mode';
-//     var val = locate(data, name);
-//     if (el.type === 'checkbox') {
-//       el.checked = val;
-//     } else if (el.type === 'radio') {
-//       if (el.value === String(val)) el.checked = true;
-//     } else if (el.type === 'number' || el.type === 'range') {
-//       if (!Number.isNaN(Number(val))) el.value = val;
-//     } else if (val != null) {
-//       el.value = val;
-//     } 
-//     $(el).trigger('input');
-//   });
-// };
 
 var scenes;
 var reponses;
@@ -123,9 +40,6 @@ var states = {
 var languageList = [];
 var defaultLanguage = 'FR';
 var currentLanguage = 'FR';
-
-
-
 
 $.getJSON('/data/reponsesBot.json', function(data) {
   reponses = data;
@@ -182,18 +96,6 @@ socket.on('users change', function(users) {
   states.users = users;
   displayUsers(true);
 });
-
-
-
-// socket.on('avatars position', (data) => {
-//   $('#avatars_area').val(JSON.stringify(data));
-//   $('#avatars_area').trigger('input');
-//   if ($('#boite').find('.boite_radio--gifs')[0].checked) {
-//     $('#boite').find('textarea').val($('#avatars_area').val());
-//     $('#boite').find('textarea').trigger('input');
-//   }
-// })
-
 
 
 var $main = $('main');
@@ -274,100 +176,9 @@ $('#tools').append(
       function() {
         socket.emit('step', offStep);
       }
-    ),
-    // $(`<button class="_icon">✏️ editor</button>`).on(
-    //   'click',
-    //   function() {
-    //     var sceneName = '';
-    //     var win;
-    //       win = window.open('/editor', '_blank');
-    //       // function sendScreen(name) {
-    //         setTimeout(() => {
-    //           var data = fecthScreens();
-    //           var out = {};
-    //           out['screen'] = data['screen'];
-    //           console.log(out)
-    //           socket.emit('step from master', addExtraData(out));
-    //         }, 1000);
-            
-    //       if (win) {
-    //         //Browser has allowed it to be opened
-    //         win.focus();
-    //     } else {
-    //         //Browser has blocked it
-    //         alert('Please allow popups for this website');
-    //     }
-    //   }
-    // ),
-    // $(`<button class="_icon">SCAN QR</button>`).on(
-    //   'click',
-    //   function() {
-    //     document.querySelector('#QR_modal').style.display = 'block';
-    //     getMediaStream();
-    //   }
-    // ),
-    // $(`<div></div>`).append(
-    //   $(`<label for='select_effect' class="_icon" >✨ etape effects</label>`),
-    //   $(`<select id='select_effect'>
-    //       <option value='none'>none</option>
-    //       <option value='up'>⬆️ slide up</option>
-    //       <option value='down'>⬇️ slide down</option>
-    //       <option value='right'>➡️ slide right</option>
-    //       <option value='left'>⬅️ slide left</option>
-    //   </select>`)
-    // ),
-    // $(`<div></div>`).append(
-    //   $(`<label for='select_language'>Select language</label>`),
-    //   $(`<select class="_icon" id='select_language'></select>`)
-    //   .on(
-    //     'change',
-    //       function() {
-    //         socket.emit('change current language', {language : this.value});
-    //         currentLanguage = this.value;
-    //         var url = `/data/visual_${this.value}.json`;
-    //         $.getJSON(url, function(data) {
-    //           scenes = data;
-    //           displayVisual();
-    //         });
-    //       }
-    //   )
-    // ),
-    // $(`<div></div>`).append(
-    //   $(`<label for='select_language'>Create QR code image</label>`),
-    //   $(`<input type='text' id='QR_input'></inpuut>`),
-    //   $(`<button type='file'>Save</button>`)
-    //   .on(
-    //     'click',
-    //       function() {
-    //         socket.emit('create qr code', {src : $('#QR_input')[0].value});
-    //         $('#QR_input')[0].value = '';
-    //       }
-    //   )
-    // )
+    )
   )
 );
-
-// socket.on('QR code response', function(data){
-//   alert(data.message)
-// })
-
-// $('#layout').append(
-//   $(`<div class="box-v"></div>`).append(
-//     $(`<button class="_icon">Define layout</button>`).on(
-//       'click',
-//       function(e) {
-//         e.preventDefault();
-//         document.getElementById("layout_modal").style.display = "block";
-//       }
-//     ),
-//     $(`<button class="_icon">Restore to default</button>`).on(
-//       'click',
-//       function() {
-//         setDefaultMainScreenLayout();
-//       }
-//     )   
-//   )
-// );
 
 /* Shortcuts
 ============ */
@@ -695,303 +506,9 @@ $.each(boites_mobiles, function(key, val) {
 
 $('.boite_radio--no_phone').prop('checked', true);
 
-// $boites_types.on('dblclick', '.boite_label', function() {
-//   $(this.form).submit();
-// });
 
-/* Media
-======== */
-// var datalists = {
-//   decors: {
-//     el: $('<datalist id="list_decors"></datalist>'),
-//     data: []
-//   },
-//   musics: {
-//     el: $('<datalist id="list_musics"></datalist>'),
-//     data: []
-//   },
-//   styles: {
-//     el: $('<datalist id="list_styles"></datalist>'),
-//     data: []
-//   },
-//   modes: {
-//     el: $('<datalist id="list_modes"></datalist>'),
-//     data: []
-//   }
-// };
-
-// function datalistsWrite() {
-//   $.each(datalists, function(key, val) {
-//     val.el.empty();
-//     val.data.forEach(item => {
-//       val.el.append(`<option value="${item}" />`);
-//     });
-//   });
-// }
-
-// $.each(datalists, function(key, val) {
-//   $main.append(val.el);
-// });
-
-// var $media = $('#media');
-
-// $media.on('mousedown', '.file', function() {
-//   setEdit($(this).attr('title'));
-// });
-
-// var medias = {
-//   styles: $('.media_styles'),
-//   decors: $('.media_decors'),
-//   pages: $('.media_pages'),
-//   layouts: $('.media_layouts'),
-//   video: $('.media_video'),
-//   audio: $('.media_audio'),
-//   gifs: $('.media_gifs'),
-//   images: $('.media_images')
-// };
-
-// function displayMedia() {
-//   medias.styles.empty();
-//   medias.decors.empty();
-//   medias.pages.empty();
-//   medias.layouts.empty();
-//   medias.video.empty();
-//   medias.audio.empty();
-//   medias.gifs.empty();
-//   medias.images.empty();
-
-//   $.each(datalists, function(key, val) {
-//     val.el.empty();
-//     val.data.length = 0;
-//   });
-
-//   datalists.modes.data = Object.keys(modes);
-
-//   /* Pages
-//   ======== */
-//   $.each(states.pages, function(key, val) {
-//     var path = `@${val}`;
-//     var file = `<div title="${path}" class="file">${path}</div>`;
-//     medias.pages.append(file);
-//     datalists.decors.data.push(path);
-//   });
-
-
-//   /* Css
-//   ====== */
-//   var decorsStyleSheet = document.styleSheets[1].cssRules;
-//   [...decorsStyleSheet].forEach(val => {
-//     var styles = [...val.style];
-//     val = val.selectorText;
-//     if (val) {
-//       var file = `<div title="${val}" class="file">${val}</div>`;
-//       if (styles.includes('background-color') || styles.includes('background-image')) {
-//         medias.decors.append(file);
-//         datalists.decors.data.push(val);
-//       } else {
-//         medias.styles.append(file);
-//         datalists.styles.data.push(val);
-//       }
-//     }
-//   });
-
-//   /* Media
-//   ======== */
-//   $.each(states.media, function(key, val) {
-//     var file = `<div title="${val.replace("frontend\\data\\media\\", "").replaceAll("\\", "/")}" class="file">${val.replace("frontend\\data\\media\\", "").replaceAll("\\", "/")}</div>`;
-//     // var file = `<div title="${val}" class="file">${val}</div>`;
-//     if (
-//       val.toLowerCase().endsWith('.wav') ||
-//       val.toLowerCase().endsWith('.flac') ||
-//       val.toLowerCase().endsWith('.mp3') ||
-//       val.toLowerCase().endsWith('.ogg')
-//     ) {
-//       medias.audio.append(file);
-//       datalists.musics.data.push(val);
-//     } else if (
-//       val.toLowerCase().endsWith('.jpeg') ||
-//       val.toLowerCase().endsWith('.jpg') ||
-//       val.toLowerCase().endsWith('.png') ||
-//       val.toLowerCase().endsWith('.svg') ||
-//       val.toLowerCase().endsWith('.webp') ||
-//       val.toLowerCase().endsWith('.jfif') 
-//     ) {
-//       medias.images.append(file);
-//       datalists.decors.data.push(val);
-//     }  else if (
-//       val.toLowerCase().endsWith('.html')
-//     ) {
-//       medias.layouts.append(file);
-//       datalists.decors.data.push(val);
-//     } else if (
-//       val.toLowerCase().endsWith('.gif') //
-//     ) {
-//       medias.gifs.append(file);
-//       datalists.decors.data.push(val);
-//     } else if (
-//       val.toLowerCase().endsWith('.webm') ||
-//       val.toLowerCase().endsWith('.mp4') ||
-//       val.toLowerCase().endsWith('.mov') ||
-//       val.toLowerCase().endsWith('.wmv') ||
-//       val.toLowerCase().endsWith('.avi') ||
-//       val.toLowerCase().endsWith('.ogv')
-//     ) {
-//       medias.video.append(file);
-//       datalists.decors.data.push(val);
-//     }
-//   });
-
-//   datalistsWrite();
-// }
-
-/* Screens
-========== */
-// var $screens = $('#screens');
-// var tmpl_screen__ctrl = $('#tmpl_screen__ctrl').html();
 
 var isRepetMode = true;
-
-// var screenName = {
-//   screen: '<i>📽️</i> SCREEN',
-//   // emo: '<i>📺</i> EMO',
-//   laptop: '<i>💻</i> LAPTOP',
-//   console: '<i>🖥️</i> CONSOLE'
-// };
-
-// displayScreens();
-
-// var screens = {
-//   // console: $('#console'),
-//   // screen: $('#screen'),
-//   // emo: $('#emo'),
-//   // laptop: $('#laptop'),
-//   boite: $('#boite'),
-//   osc: $('#osc'),
-//   // saut: $('#saut'),
-//   // mainScreen: $('#main-screen-layout')
-// };
-
-// var defaultScreen = {};
-// var defaultBoite = getFormValues(screens.boite[0], true);
-// var defaultOsc = getFormValues(screens.osc[0], true);
-// // var defaultSaut = getFormValues(screens.saut[0], true);
-// // var defaultMainScreen = getFormValues(screens.mainScreen[0], true);
-
-// var dummyStep = {
-//   console: defaultScreen,
-//   screen: defaultScreen,
-//   // emo: defaultScreen,
-//   laptop: defaultScreen,
-//   boite: defaultBoite,
-//   osc: defaultOsc,
-//   // saut: defaultSaut,
-//   // mainScreen: defaultMainScreen
-// };
-
-// var cleanedStep = cleanStep(deepMerge({}, dummyStep));
-// cleanedStep.osc.message = '';
-
-// var offStep = {
-//   console: { active: false },
-//   screen: { active: false },
-//   // emo: { active: false },
-//   laptop: { active: false }
-// };
-
-// function cleanStep(step) {
-//   if (typeof step === 'object') {
-//     $.each(step, (key, val) => {
-//       if (val === '') step[key] = ' ';
-//       else step[key] = cleanStep(step[key]);
-//     });
-//   }
-//   return step;
-// }
-
-// function displayScreen(name) {
-//   return $(
-//     `<form id="${name}" class="box-h box-screen" autocomplete="off"></form>`
-//   ).append(
-//     $(`<div class="box-v box-min"><div class="button_radio _box-min">
-//         <label>
-//           <input checked type="checkbox" name="active" />
-//           <span>${screenName[name]}</span>
-//         </label>
-//       </div>
-//       <!--<button class="change_screen_rotation box-min icon toggle">📐</button>-->
-//       </div>`),
-//     $(`${tmpl_screen__ctrl}`),
-//     $(`<button class="icon" type="submit">📢</button>`),
-//   )
-// }
-
-// function displayScreens() {
-//   $screens.append(
-//     displayScreen('console'),
-//     displayScreen('screen'),
-//     // displayScreen('emo'),
-//     displayScreen('laptop')
-//   );
-//     $(`#console`).find('.avatars-on').remove();
-//     $(`#console`).find('.avatars-off').remove();
-//     $(`#console`).find('#avatars_area').remove();
-//     $(`#laptop`).find('.avatars-on').remove();
-//     $(`#laptop`).find('.avatars-off').remove();
-//     $(`#laptop`).find('#avatars_area').remove();
-// }
-
-// var lastFocused;
-// function setEdit(val) {
-//   lastFocused = document.activeElement;
-//   lastFocused.value = val;
-//   setTimeout(function() {
-//     lastFocused.focus();
-//     $(lastFocused).trigger('input');
-//   }, 0);
-// }
-
-// function walkSteps($step) {
-//   var $parent = $step.parent();
-//   var data = deepMerge({}, cleanedStep);
-//   $parent.find('.scene__step').each(function() {
-//     var val = normalizeStep($(this).data('val'));
-//     if ('boite' in val === false) val.boite = defaultBoite;
-//     data = deepMerge(data, val);
-//     if (this === $step[0]) {
-//       return false;
-//     } else {
-//       if (data.console && 'active' in data.console) delete data.console.active;
-//       if (data.screen && 'active' in data.screen) delete data.screen.active;
-//       // if (data.emo && 'active' in data.emo) delete data.emo.active;
-//       if (data.laptop && 'active' in data.laptop) delete data.laptop.active;
-//     }
-//   });
-//   return data;
-// }
-
-// function getScreen(name) {
-//   if (name in screens) {
-//     return getFormValues(screens[name][0]);
-//   }
-// }
-
-// function getScreens() {
-//   return {
-//     // emo: getScreen('emo'),
-//     screen: getScreen('screen'),
-//     console: getScreen('console'),
-//     laptop: getScreen('laptop'),
-//     boite: getScreen('boite'),
-//     osc: getScreen('osc'),
-//     saut: getScreen('saut'),
-//     mainScreen: getScreen('mainScreen')
-//   };
-// }
-
-// function fecthScreens() {
-//   var $step = $('.scene__step.active');
-//   return $step.length ? walkSteps($step) : getScreens();
-// }
 
 function addRepetData(data) {
   if (isRepetMode) {
@@ -1006,89 +523,6 @@ function addRepetData(data) {
   }
   return data;
 }
-
-// function addEtapeSlideEffect(data) {
-//   if ($('#select_effect').val() !== 'none') {
-//     data['screen']['effect'] = $('#select_effect').val();
-//   }
-//   return data;
-// }
-
-// function addExtraData(data) {
-//   // addSelectedUsersData(data);
-//   addRepetData(data);
-//   addEtapeSlideEffect(data);
-//   return data;
-// }
-
-// function sendScreen(name) {
-//   var data = fecthScreens();
-//   var out = {};
-//   out[name] = data[name];
-//   console.log(out)
-//   socket.emit('step', addExtraData(out));
-// }
-
-// function sendScreens() {
-//   var data = fecthScreens();
-//   socket.emit('step', addExtraData(data));
-//   if (boite && 'send' in boite) boite.send();
-// }
-
-// $('.radio_fit').on('input', function() {
-//   $(this.form)
-//     .find('.sp-preview-inner')
-//     .css(
-//       'background-size',
-//       $(this.form)
-//         .find('.radio_fit:checked')
-//         .val()
-//     );
-// });
-
-// $('.color-picker')
-//   .on('input', function() {
-//     var $this = $(this);
-//     var val = $this.val();
-
-//     var $prev = $(this)
-//       .next()
-//       .find('.sp-preview-inner');
-
-//     $prev[0].className = 'sp-preview-inner';
-//     $prev.css('background-color', '');
-//     $prev.css('background-image', '');
-
-//     if (val.startsWith('.')) {
-//       $prev.addClass(val.slice(1));
-//     } else {
-//       $prev.css('background-color', val);
-//       $prev.css('background-image', `url(/data/media/${val})`);
-//     }
-//   })
-//   .spectrum({
-//     showAlpha: true,
-//     allowEmpty: true,
-//     showPalette: true,
-//     showInitial: true,
-//     preferredFormat: 'hex3',
-//     // prettier-ignore
-//     palette: [
-//         ["#000","#444","#666","#999","#ccc","#eee","#f3f3f3","#fff"],
-//         ["#f00","#f90","#ff0","#0f0","#0ff","#00f","#90f","#f0f"],
-//         ["#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc"],
-//         ["#ea9999","#f9cb9c","#ffe599","#b6d7a8","#a2c4c9","#9fc5e8","#b4a7d6","#d5a6bd"],
-//         ["#e06666","#f6b26b","#ffd966","#93c47d","#76a5af","#6fa8dc","#8e7cc3","#c27ba0"],
-//         ["#c00","#e69138","#f1c232","#6aa84f","#45818e","#3d85c6","#674ea7","#a64d79"],
-//         ["#900","#b45f06","#bf9000","#38761d","#134f5c","#0b5394","#351c75","#741b47"],
-//         ["#600","#783f04","#7f6000","#274e13","#0c343d","#073763","#20124d","#4c1130"]
-//       ],
-//     change: function() {
-//       $(this).trigger('input');
-//     }
-//   });
-
-// $('#send_all_screens').on('click', sendScreens);
 
 $('.repet__pause').on('click', function() {
   setTimeout(function() {
@@ -1288,56 +722,7 @@ function setActiveStep(fileName, scene, step) {
   active.fileName = fileName;
   active.scene = scene;
   active.step = step;
-  // console.log(active)
 }
-
-// function toggleSubtitles(value) {
-//   const subtitlesDiv = `<div class="subtitles" style="position: absolute; width: 100%; height: 15%; color: white; bottom: 0px; background-color: rgb(211,211,211, 0.1); display: flex; align-items: center; justify-content: center; font-size: 1.5vw;" data-key='subtitles'></div>`
- 
-//   $('#line').removeData('line');
-//   if (value === 'off') {
-//       $('#screen .subtitles').remove();
-//       $('.subtitles-menu').hide();
-//       $('.subtitles-menu .editor-buttons').empty();
-//       $('#line').text('Subtitle lines');
-//   } else {
-//       if ($('#screen .subtitles').length === 0) {
-//           $('#screen').append(subtitlesDiv);
-//       }
-      
-//       $('.subtitles-menu .editor-buttons').empty();
-//       $('.subtitles-menu').show();
-
-//       if (active.fileName in subtitlesData) {
-//           if ($(`#${active.fileName} .languages`).val() in subtitlesData[active.fileName]) {
-//               $('.subtitles-menu .subtitles-style')
-//                   .append(`
-//                           <button onclick="editElement('subtitles', 'text')">
-//                               <img src="./icons/settings.svg">
-//                           </button>
-//                           <select id="load-saved-style"></select>
-//                           <button type="button" onclick="saveSubtitlesStyle('new')">Save as</button>
-//                           <button type="button" onclick="saveSubtitlesStyle('existing')">Save</button>
-//                           `);
-//               $('.subtitles-menu .subtitles-content')
-//                   .append(`<button type="button" onclick="editTranslation()">Edit translation</button>`);  
-
-//               loadSubtitlesStyles();
-//               $('#line').text(subtitlesData[active.fileName][$(`#${active.fileName} .languages`).val()].split("\n")[0]);
-//               $('#line').data('line', 0);
-//               $('.subtitles').text(subtitlesData[active.fileName][$(`#${active.fileName} .languages`).val()].split("\n")[0]);
-//           } else {
-//               $('.subtitles-menu .subtitles-content').append(`<button type="button" onclick="importTranslation()" style="margin: 0px;">Import translation</button> <small>No subtitles on ${$(`#${active.fileName} .languages`).val()} language</small>`);
-//               $('#line').text('Subtitle lines');
-//               $('.subtitles').text('Subtitle lines');
-//           }
-//       } else {
-//           $('.subtitles-menu .subtitles-content').append(`<button type="button" onclick="importTranslation()" style="margin: 0px;">Import translation</button> <small>No subtitles on ${$(`#${active.fileName} .languages`).val()} language</small>`);
-//           $('#line').text('Subtitle lines');
-//           $('.subtitles').text('Subtitle lines');
-//       }
-//   }
-// }
 
 function displayStructure(fileName, data) {
   let showElement =  `<ul id=${fileName} class="show" style="display: none;">
@@ -1352,10 +737,6 @@ function displayStructure(fileName, data) {
   $('#visual').append(showElement);
   $('#select-novel').append(`<option value=${fileName}>${data.name}</option>`)
 
-  // $(`input:radio[name=${`${fileName}_subtitles`}]`).change(function() {
-  //   toggleSubtitles(this.value);
-  // });
-
   // APPEND AVAILABLE LANGUAGES
   $.each(data.languages, function(key, value) {   
       $('#' + fileName).find('select')
@@ -1368,7 +749,6 @@ function displayStructure(fileName, data) {
   currentLanguage = $(this).val();
   console.log(currentLanguage);
   socket.emit('change current language', {language : currentLanguage});
-  // console.log(currentLanguage)
  })
  
 
@@ -1396,62 +776,6 @@ function displayStructure(fileName, data) {
         $("#" + id).append(`<li class="stepElement" data-step=${stepOrderNumber} onclick="setStep(event, '${fileName}', ${sceneOrderNumber}, ${stepOrderNumber})">${stepName}</li>`)
       })
 
-      // DEFINE SORTABLE FUNCTIONS FOR SCENES
-      // $('#' + fileName + 'sceneList').sortable({
-      //     start : function (event, ui) {
-      //         startPosition = ui.item.index();
-      //      },
-      //      stop: function(event, ui) {
-      //         let endPosition = ui.item.index();
-      //         if (endPosition !== startPosition) {
-      //             // ADJUST MAIN DATA
-      //             let movedElement = mainData[fileName]['scene-order'].splice(startPosition, 1)[0];
-      //             mainData[fileName]['scene-order'].splice(endPosition, 0, movedElement);
-      //             // SAVE TO JSON
-      //             saveSceneOrder(fileName, mainData[fileName]['scene-order']);
-      //         }
-      //      }
-      // })
-
-      // DEFINE SORTABLE FUNCTIONS FOR STEPS
-      // $("#" + id).sortable({
-      //     start : function (event, ui) {
-      //        startPosition = ui.item.index();
-      //     },
-      //     stop: function(event, ui) {
-      //         let endPosition = ui.item.index();
-      //         if (endPosition !== startPosition) {
-      //             // ADJUST MAIN DATA
-      //             let movedElement = mainData[fileName]['scenes'][sceneOrderNumber]['step-order'].splice(startPosition, 1)[0];
-      //             mainData[fileName]['scenes'][sceneOrderNumber]['step-order'].splice(endPosition, 0, movedElement);
-      //             // SAVE TO JSON
-      //             saveStepOrder(fileName, sceneOrderNumber, mainData[fileName]['scenes'][sceneOrderNumber]['step-order']);
-
-      //             // ADJUST TEXT STEP number IN HTML
-      //             $(ui.item).text('Step ' + (endPosition + 1));
-      //             $(function () {
-      //                 let currentLi = ui.item;
-      //                 let number = endPosition;
-
-      //                 while (number > 0) {
-      //                     $(currentLi).prev().text('Step ' + number);
-      //                     currentLi = $(currentLi).prev();
-      //                     number = number - 1;
-      //                 }       
-                      
-      //                 currentLi = ui.item;
-      //                 number = endPosition + 2;
-
-      //                 while (number <= ui.item.parent().children().length) {
-      //                     $(currentLi).next().text('Step ' + number);
-      //                     currentLi = $(currentLi).next();
-      //                     number = number + 1;
-      //                 }
-      //             });
-      //         }
-      //     }
-      // });    
-
       // DEFINE TOGGLE FUNCTIONS FOR STEP LIST
       $("#" + id + "toggler").click(function() {
           $(".toggler").not(this).nextAll().hide();
@@ -1471,10 +795,6 @@ function displayStructure(fileName, data) {
               setActiveStep(fileName, "", "");
               $(".stepElement").removeClass('active');
           }
-          // $('#step-media ul').empty();
-          // $('#preview').empty();
-          // $('#console-checkbox').prop('checked', false);
-          // $('#boite-checkbox').prop('checked', false);
       });
   })
 }
@@ -1494,17 +814,6 @@ function displayStructure(fileName, data) {
       // unmark all scenes and steps
       $(".toggler").removeClass('active');
       $(".stepElement").removeClass('active');
-
-      // MARK ACTIVE SHOW in constant active and by color in menu
-      // if ($(this).hasClass('active')) {
-      //     setActiveStep(fileName, "", "");
-      // } else {
-      //     setActiveStep("", "", "");
-      // }
-      // $('#step-media ul').empty();
-      // $('#preview').empty();
-      // $('#console-checkbox').prop('checked', false);
-      // $('#boite-checkbox').prop('checked', false);
   })
 }
 
@@ -1533,12 +842,27 @@ function checkIfProblematic(data) {
 
 function setStep(e, fileName, scene, step) {
   $(".stepElement").not(e.target).removeClass('active');
-  // $(e.target).parent().find('.structure-buttons').remove();
   $(e.target).toggleClass('active');
 
   // CLEAR PREVIOUS MODES
   finalFantasy('');
+  // console.log(currentStepData);
+  // $.each(currentStepData, function(screen, data) {
+  //   if ('transition' in data && data['transition']['end'] !== 'none') {
+  //     setTimeout(() => {
+  //               continueSettingStep();
+  //           }, parseFloat(data['transition']['end']['animation-duration'])*1000);
+  //     for (let data_key of data['media-order']) {
+  //       $(`#${screen} .step__decor div[data-key=${data_key}]`).css(data['transition']['end']);
+  //     }
+  //   } else {
+  //     continueSettingStep();
+  //   }
+  // });
+continueSettingStep()
+  function continueSettingStep() {
 
+ 
   if($(e.target).hasClass('active')) {
       setActiveStep(fileName, scene, step);
 
@@ -1556,11 +880,7 @@ function setStep(e, fileName, scene, step) {
         socket.emit('step', stepData);
        
         screenPreview = 'screenCurrent';
-        // if (checkIfProblematic(stepData)) {
-        //   displayStep(offStep['screen']);
-        // } else {
-          displayStep(stepData['screen']);
-        // }
+        displayStep(stepData['screen']);
         
         screenPreview = 'laptopCurrent';
         displayStep(stepData['laptop']);
@@ -1570,12 +890,7 @@ function setStep(e, fileName, scene, step) {
         const currentStepIndex = mainData[fileName]['scenes'][scene]['step-order'].indexOf(step);
         const nextStep = mainData[fileName]['scenes'][scene]['step-order'][currentStepIndex + 1];
         if (nextStep) {
-          // if (checkIfProblematic(mainData[fileName]['scenes'][scene]['steps'][nextStep])) {
-          //   displayStep(offStep['screen']);
-          // } else {
-            displayStep(mainData[fileName]['scenes'][scene]['steps'][nextStep]['screen']);
-          // }
-          // displayStep(mainData[fileName]['scenes'][scene]['steps'][nextStep]['screen']);
+          displayStep(mainData[fileName]['scenes'][scene]['steps'][nextStep]['screen']);
           screenPreview = 'laptopNext';
           displayStep(mainData[fileName]['scenes'][scene]['steps'][nextStep]['laptop']);
         } else {
@@ -1583,17 +898,6 @@ function setStep(e, fileName, scene, step) {
           screenPreview = 'laptopNext';
           displayStep(offStep['laptop']);
         }
-
-        // start playing videos only after all are loaded to play trough
-        // Array.from(document.getElementsByTagName('video')).forEach(video => {
-        //   video.oncanplay = function() {
-        //     loadedVideos = loadedVideos + 1;
-        //     if (loadedVideos === videoElementsNo) {
-        //       startAllVideos()
-        //     }
-        //   }
-        // })
-
   } else {
       setActiveStep(fileName, scene, ""); 
       socket.emit('step', offStep);
@@ -1603,6 +907,8 @@ function setStep(e, fileName, scene, step) {
         displayStep(offStep[element.replace('Current', '').replace('Next', '')]);
       })
   }
+}
+  console.log(currentStepData);
 }
 
 function startAllVideos() {
@@ -1618,108 +924,6 @@ function scrollToStep($step) {
     duration: 200
   });
 }
-
-//   var tmp = {
-//     screen: deepMerge({}, defaultScreen, val.screen),
-//     // emo: deepMerge({}, defaultScreen, val.emo),
-//     console: deepMerge({}, defaultScreen, val.console),
-//     laptop: deepMerge({}, defaultScreen, val.laptop),
-//     boite: deepMerge({}, defaultBoite, val.boite),
-//     osc: deepMerge({}, dummyStep.osc, val.osc),
-//     saut: deepMerge({}, dummyStep.saut, val.saut),
-//     mainScreen: deepMerge({}, dummyStep.mainScreen, val.mainScreen)
-//   };
-
-//   return tmp;
-// }
-
-// function setCtrlScreen($dest, data) {
-//   if (data) setFormValues($dest[0], data);
-// }
-
-// function setCtrlScreens(data) {
-//   // setCtrlScreen(screens.emo, data.emo);
-//   setCtrlScreen(screens.screen, data.screen);
-//   setCtrlScreen(screens.console, data.console);
-//   setCtrlScreen(screens.laptop, data.laptop);
-//   setCtrlScreen(screens.boite, data.boite);
-//   setCtrlScreen(screens.osc, data.osc);
-//   setCtrlScreen(screens.saut, data.saut);
-//   setCtrlScreen(screens.mainScreen, data.mainScreen);
-// }
-
-
-// function displayStep(val) {
-//   val = serialiseStep(val);
-//   // val1 = adjustStepForCurrentLanguage(val);
-//   return $('<div class="scene__step">')
-//     .data({
-//       val: val,
-//       original: val,
-//       saved: []
-//     })
-//     .append(
-//       $('<span class="scene__step__json"></span>').text(stringifyStep(val)),
-//       $(`<button class="scene__step__reset no_btn icon">↩️</button>`).attr(
-//         'title',
-//         'Rétablir les précédentes sauvegardes de cette étape'
-//       )
-//     );
-// }
-
-
-// function adjustStepForCurrentLanguage(item){
-//   // $.each(a[0], function(key, x) {
-//     // x.forEach(function(item) {
-//       if (typeof item === 'string') {
-//         return item;
-//         // results += item + '\n';
-//       } else {
-//         var stepObject = item;
-//         $.each(item, function(key, y) {
-//           if (typeof y !== 'string') {
-//             if ('texte' in y) {
-//               if (typeof y.texte !== 'string') {
-//                 if (currentLanguage in y.texte) {
-//                   stepObject[key].texte = y.texte[currentLanguage];
-//                 } else {
-//                   // stepObject[key].texte = y.texte[defaultLanguage];
-//                   stepObject[key].texte = `NO TRANSLATION!`
-//                 }
-//               }
-//             } else if ('arg' in y) {
-//               if (typeof y.arg !== 'string') {
-//                 if (currentLanguage in y.arg) {
-//                   stepObject[key].arg = y.arg[currentLanguage];
-//                 } else {
-//                   // stepObject[key].texte = y.texte[defaultLanguage];
-//                   stepObject[key].arg = `NO TRANSLATION!`
-//                 }
-//               }
-//             }
-//           } else {
-//             if (currentLanguage in item) {
-//               stepObject = item[currentLanguage];
-//             } else {
-//               // stepObject = item[defaultLanguage];
-//               stepObject = `NO TRANSLATION!`
-//             }
-//           }
-//         });
-//         return stepObject;
-//       }
-//     // });
-//   // });
-// }
-
-// $('#visual__openall').on('click', function() {
-//   $('.scene').removeClass('closed');
-// });
-
-// $('#visual__closeall').on('click', function() {
-//   $('.scene').addClass('closed');
-// });
-
 
 $('#visual__next').on('click', function() {
   let nextStep;
@@ -1746,13 +950,6 @@ $('#visual__next').on('click', function() {
         nextStep.click();
       }
       scrollToStep(nextStep);
-      // empty scenes preventer in editor
-      // if (nextScene.find('.steps li').first().length === 0) {
-      //   socket.emit('step', offStep);
-      //   scrollToStep(nextScene);
-      // } else {
-      //   scrollToStep(nextStep);
-      // }
     }
   }
 
@@ -1768,35 +965,6 @@ $('#visual__prev').on('click', function() {
 
 
 
-$visual
-  // .on('click', function(e) {
-  //   if (e.target === $visual[0] || e.target.classList.contains('scene')) {
-  //     $('.scene__radio').prop('checked', false);
-  //     $('.scene__step').removeClass('active');
-  //   }
-  // })
-  // .on('click', '.scene__radio', function() {
-  //   $('.scene__step').removeClass('active');
-  // })
-  // .on('click', '.scene__step', function() {
-  //   activateStep($(this));
-  // })
-  // .on('dblclick', '.scene__step', function() {
-  //   activateStep($(this));
-  //   sendScreens();
-  // })
-  // .on('click', '.scene__step__reset', function(e) {
-  //   e.preventDefault();
-  //   e.stopPropagation();
-  //   var $step = $(this).parent();
-  //   var saved = $step.data('saved');
-  //   var val = saved.pop() || $step.data('original');
-  //   $step
-  //     .data('val', val)
-  //     .find('.scene__step__json')
-  //     .text(stringifyStep(val));
-  //   $step.click();
-  // });
 
 /* Users
 ======== */
@@ -2139,32 +1307,66 @@ function applyZIndexes(data) {
   })
 }
 
+let currentStepData = {
+  'screenCurrent' : {},
+  'laptopCurrent' : {},
+  'screenNext' : {},
+  'laptopNext' : {}
+};
+
 function displayStep(data) {
-    clearUnwantedMedia(data);
 
-    $(`#${screenPreview} .step__decor small`).remove();
+    // if ('transition' in currentStepData[screenPreview] && currentStepData[screenPreview]['transition']['end'] !== 'none') {
+    //     setTimeout(() => {
+    //         continueSettingStep();
+    //     }, parseFloat(currentStepData[screenPreview]['transition']['end']['animation-duration'])*1000);
 
-    const mediaOrder = data['media-order'];
-    const stepMedia = data['media'];
+    //     for (let data_key of currentStepData[screenPreview]['media-order']) {
+    //         $(`#${screenPreview} .step__decor div[data-key=${data_key}]`).css(currentStepData[screenPreview]['transition']['end']);
+    //     }
+    // } else {
+    //     continueSettingStep();
+    // }
+    // console.log(currentStepData)
+    // console.log(screenPreview)
+continueSettingStep()
+    function continueSettingStep() {
+      clearUnwantedMedia(data);
 
-    const videoNo = countVideoMedias(stepMedia);
+      $(`#${screenPreview} .step__decor small`).remove();
 
-    for (let data_key of mediaOrder) {
-      if (videoNo < 3) {
-        setElements(stepMedia[data_key].attributes.src, stepMedia[data_key]['type'], data_key, stepMedia[data_key]);
-      } else {
-        if (stepMedia[data_key]['type'] !== 'media_video') {
+      const mediaOrder = data['media-order'];
+      const stepMedia = data['media'];
+
+      const videoNo = countVideoMedias(stepMedia);
+
+      for (let data_key of mediaOrder) {
+        if (videoNo < 3) {
           setElements(stepMedia[data_key].attributes.src, stepMedia[data_key]['type'], data_key, stepMedia[data_key]);
+           // SET START TRANSITION if exists
+           if ('transition' in data && data['transition']['start'] !== 'none') {
+            $(`#${screenPreview} .step__decor div[data-key=${data_key}]`).css(data['transition']['start']);
+          }
+        } else {
+          if (stepMedia[data_key]['type'] !== 'media_video') {
+            setElements(stepMedia[data_key].attributes.src, stepMedia[data_key]['type'], data_key, stepMedia[data_key]);
+            // SET START TRANSITION if exists
+            if ('transition' in data && data['transition']['start'] !== 'none') {
+              $(`#${screenPreview} .step__decor div[data-key=${data_key}]`).css(data['transition']['start']);
+            }
+          }
         }
       }
-    }
-    applyZIndexes(data); 
+      applyZIndexes(data); 
+      
+      setElements("", "console", "", data['console']);
+      $(`#${screenPreview} .step`).css('background-color', data['background-color']);
     
-    setElements("", "console", "", data['console']);
-    $(`#${screenPreview} .step`).css('background-color', data['background-color']);
-   
-    if (videoNo >= 3) {
-      $(`#${screenPreview} .step__decor`).append('<small style="position: absolute; bottom: 5%; left: 10%; color: white;">* due to long loading videos are not shown in preview </small>')
+      if (videoNo >= 3) {
+        $(`#${screenPreview} .step__decor`).append('<small style="position: absolute; bottom: 5%; left: 10%; color: white;">* due to long loading videos are not shown in preview </small>')
+      }
+
+      currentStepData[screenPreview] = jQuery.extend(true, {}, data);
     }
 }
 
@@ -2201,22 +1403,7 @@ function setElements(val, type, data_key, stepMediaObject) {
                             <video autoplay style="width: 100%;" class="media"></video>
                           </div>`
  
-  const textElement = `
-                        <pre contenteditable="true" class="text draggable" data-key=${data_key} data-type=${type} 
-                                  style=" 
-                                  position: absolute; 
-                                  top: 25%; 
-                                  left:25%;
-                                  white-space: pre-wrap; 
-                                  word-wrap: break-word;
-                                  color: white;
-                                  font-size: 16px;
-                                  margin: 0px;
-                                  padding: 10px;
-                                  font-family: Arial;
-                                  "
-                        >${val}</pre>
-                    `
+                          const textElement = `<div class="text draggable resizable" data-key=${data_key} data-type=${type} style="position: absolute; top: 25%; left:25%; width: 35%; height: 35%; color: white; font-size: 2vw; font-family: Arial; overflow: hidden;"><pre style="white-space: pre-wrap; overflow-wrap: break-word; width: 100%;">${val}</pre></div>`
   
   const elements = {
     'media_images' : imageElement,
@@ -2233,15 +1420,7 @@ function setElements(val, type, data_key, stepMediaObject) {
           $(`#${screenPreview} .step__decor`).append(elements[type]);
       }
   }
-  
-  // if(type === 'console') {
-  //     if(stepMediaObject.active === true && $(`#${screenPreview} .step .console`).length === 0) {
-  //         $(`#${screenPreview} .step`).append(console);
-  //     }
-  //     if (stepMediaObject.active === false && $(`#${screenPreview} .step .console`).length !== 0) {
-  //       $(`#${screenPreview} .step .console`).remove();
-  //     }
-  // } 
+ 
   if(type === 'console') {
     if($(`#${screenPreview} .step .console`).length === 0) {
       $(`#${screenPreview} .step`).append(console);
@@ -2304,11 +1483,11 @@ function setElements(val, type, data_key, stepMediaObject) {
 
            // ADD NEW TEXT IF NEEDED
            if (stepMediaObject['type'] === 'text') {
-              if (mediaElement.text() !== stepMediaObject['content']) {
+              if (mediaElement.find('pre').text() !== stepMediaObject['content']) {
                 if (stepMediaObject['classes'].join(' ').includes('fantasy')) {
                   finalFantasy(stepMediaObject['content'], data_key, screenPreview ,true);
                 } else {
-                    mediaElement.text(stepMediaObject['content']);
+                    mediaElement.find('pre').text(stepMediaObject['content']);
                 }
               }
                // CORRECTION DUE TO DIFFERENCE IN EDITOR SCREEN SIZE AND REAL FULL SCREEN SIZE

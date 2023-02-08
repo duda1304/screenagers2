@@ -8,6 +8,7 @@ let active = {
     step : ""
 }
 
+
 let subtitlesData = {};
 
 const screens = ['screen', 'laptop'];
@@ -52,6 +53,9 @@ $('.screens div').on('click', function(){
     // toggle preview
     $(`#${activeScreen}`).show();
     $('.preview').not(`#${activeScreen}`).hide();
+
+    // adjust transition button label
+    adjustTransitionButtonLabel();
 });
 
 $( function() {
@@ -495,6 +499,9 @@ function setActiveStep(fileName, scene, step) {
     active.fileName = fileName;
     active.scene = scene;
     active.step = step;
+    if (step === '') {
+        $('#transition-button-label').text('Transition')
+    }
 }
 
 function applyZIndexes() {
@@ -511,7 +518,7 @@ function clearUnwantedMedia(stepMedia){
     let keysArray = [].map.call($(`#${activeScreen}`).children().not('#boite, .console'), function (e) {
     return e.getAttribute('data-key')
     })
-
+    
     keysArray.forEach(key => {
         if (!stepMedia[key]) {
             if ($(`#${activeScreen} [data-key=${key}]`).find('video').length !== 0) {
@@ -544,7 +551,7 @@ function setStep(e, fileName, scene, step) {
     $(e.target).toggleClass('active');
 
     // CLEAR PREVIOUS  STEP DATA LIST
-    $(`#step-media ul`).empty();
+    $(`#step-media ul`).empty()
     $('#console-checkbox').prop('checked', false);
 
     // CLEAR PREVIOUS MODES
@@ -553,27 +560,65 @@ function setStep(e, fileName, scene, step) {
     // REMOVE TEXTAREA FOR TEXT EDITING IF EXISTED
     toggleEditTextContentElement();
 
-    if($(e.target).hasClass('active')) {
-        setActiveStep(fileName, scene, step);
+    // CHECK IF TRANSITION FROM PREVIOUS STEP SHOULD BE ADDED
+    if (active.step !== '') {
+        const currentStepPreviewData = mainData[active.fileName]['scenes'][active.scene]['steps'][active.step][activeScreen];
+        if ('transition' in currentStepPreviewData && currentStepPreviewData['transition']['end'] !== 'none') {
+            setTimeout(() => {
+                continueSettingStep();
+            }, parseFloat(currentStepPreviewData['transition']['end']['animation-duration'])*1000);
 
-        // APPEND clone and delete buttons to step
-        $(e.target).append(`<div class="structure-buttons">
-                                <span onclick="duplicate('step')"><img class="duplicate-icon" src="./icons/duplicate.png"></img></span>
-                                <span class='delete' onclick="deleteFromStructure('step')"><img src="./icons/trash.svg"></img></span>
-                                <span onclick="editName('step')"><img class="edit-icon" src="./icons/edit.png"></img></span>
-                            </div>`)
-        // PREVENT option to delete only step
-        if ($(e.target).next().length === 0 && $(e.target).prev().length === 0) {
-            $(e.target).find('.delete').remove();
+            for (let data_key of currentStepPreviewData['media-order']) {
+                $(`#${activeScreen} div[data-key=${data_key}]`).css(currentStepPreviewData['transition']['end']);
+            }
+        } else {
+            continueSettingStep();
         }
-        // DISPLAY step media
-        displayActiveStepMedia(); 
-
     } else {
-        setActiveStep(fileName, scene, ""); 
-        $('#preview_background-color').val('');
-        screens.forEach(screen => $(`#${screen}`).empty());
+        continueSettingStep();
     }
+   
+    
+    function  continueSettingStep() {
+        if($(e.target).hasClass('active')) {
+            setActiveStep(fileName, scene, step);
+
+            // APPEND clone and delete buttons to step
+            $(e.target).append(`<div class="structure-buttons">
+                                    <span onclick="duplicate('step')"><img class="duplicate-icon" src="./icons/duplicate.png"></img></span>
+                                    <span class='delete' onclick="deleteFromStructure('step')"><img src="./icons/trash.svg"></img></span>
+                                    <span onclick="editName('step')"><img class="edit-icon" src="./icons/edit.png"></img></span>
+                                </div>`)
+            // PREVENT option to delete only step
+            if ($(e.target).next().length === 0 && $(e.target).prev().length === 0) {
+                $(e.target).find('.delete').remove();
+            }
+            // DISPLAY step media
+            displayActiveStepMedia(); 
+
+        } else {
+            setActiveStep(fileName, scene, ""); 
+            $('#preview_background-color').val('');
+            screens.forEach(screen => $(`#${screen}`).empty());
+        }
+    }
+}
+
+function adjustTransitionButtonLabel() {
+    $('#transition-button-label').text('Transition');
+    const stepData = mainData[active.fileName]['scenes'][active.scene]['steps'][active.step][activeScreen];
+    let text = $('#transition-button-label').text();
+    if ('transition' in stepData) {
+        if (stepData['transition']['start']['animation-name'] !== 'none') {
+            text = text + ': ' + stepData['transition']['start']['animation-name'];
+        }
+        if (stepData['transition']['end']['animation-name'] !== 'none') {
+            text = text + ' ' + stepData['transition']['end']['animation-name'];
+        }
+    } else {
+        text = text + ': none';
+    }
+    $('#transition-button-label').text(text);
 }
 
 function displayActiveStepMedia() {
@@ -581,6 +626,7 @@ function displayActiveStepMedia() {
         let currentActiveScreen = activeScreen;
         screens.forEach(screen => {
             activeScreen = screen;
+            const stepData = jsonData['scenes'][active.scene]['steps'][active.step][activeScreen];
             const mediaOrder = jsonData['scenes'][active.scene]['steps'][active.step][activeScreen]['media-order'];
             const stepMedia = jsonData['scenes'][active.scene]['steps'][active.step][activeScreen]['media'];
             
@@ -606,13 +652,22 @@ function displayActiveStepMedia() {
 
                 const li = `<li data-key=${data_key} data-type=${stepMedia[data_key]['type']} onclick="markActiveStepMediaElement(event)"><div class="visibility-icon visible" onclick="toggleVisibility(event)" data-key=${data_key}></div>${liName}</li>`;
                 $(`#step-media .${activeScreen}`).append(li);
+
                 // DISPLAY STEP IN MEDIA PREVIEW
                 setElements(stepMedia[data_key].attributes.src, stepMedia[data_key]['type'], data_key, stepMedia[data_key]);
+
+                // SET START TRANSITION if exists
+                if ('transition' in stepData && stepData['transition']['start'] !== 'none') {
+                    $(`#${activeScreen} div[data-key=${data_key}]`).css(stepData['transition']['start']);
+                }
             }
+
             applyZIndexes();
+            
+            // SET CONSOLE
             setElements("", "console", createRandomString(5), jsonData['scenes'][active.scene]['steps'][active.step][activeScreen]['console']);
 
-            
+            // SET OSC MESSAGES
             if ('osc' in jsonData['scenes'][active.scene]['steps'][active.step][activeScreen]) {
                 const oscMessages = jsonData['scenes'][active.scene]['steps'][active.step][activeScreen]['osc'];
                 $.each(oscMessages, function(key, value) {
@@ -623,17 +678,23 @@ function displayActiveStepMedia() {
                 // send OSC messages
                 sendOSCMessage(oscMessages);
             }
+
+            // SET BACKGROUND COLOR OF DISPLAY
             $(`#${screen}`).css('background-color', jsonData['scenes'][active.scene]['steps'][active.step][activeScreen]['background-color']);
-            // toggleSubtitles($(`input[name=${active.fileName}_subtitles]:checked`).val());
+          
         });
 
+
         activeScreen = currentActiveScreen;
+
+        // ADJUST tag on transition button
+       adjustTransitionButtonLabel();
 
         // ADJUST background color value
         $('#preview_background-color').val($(`#${currentActiveScreen}`).css('background-color'));
         activateColorPicker();
 
-          // pause video and audio on not active screen and start on active
+        // PAUSE VIDEO ANd AUDIO on not active screen and start on active
         $(`.preview:not(#${activeScreen}) audio`).each(function(){$(this)[0].pause()});
         $(`.preview:not(#${activeScreen}) video`).each(function(){$(this)[0].pause()});
 
@@ -647,7 +708,7 @@ function displayActiveStepMedia() {
             $(`#console-checkbox`).prop("checked", true);
         }
 
-        // set boite
+        // SET BOITE
         if ('boite' in jsonData['scenes'][active.scene]['steps'][active.step]) {
             const boite = jsonData['scenes'][active.scene]['steps'][active.step]['boite'];
             // if($('#screen #boite').length === 0) {
@@ -726,25 +787,10 @@ function setElements(val, type, data_key, stepMediaObject) {
                             OSC
                         </div>`
 
-    // const textElement = `
-    //                         <pre class="text draggable resizable" data-key=${data_key} data-type=${type} 
-    //                                  style=" 
-    //                                  position: absolute; 
-    //                                  top: 25%; 
-    //                                  left:25%;
-    //                                 background-color:pink;
-    //                                  color: white;
-    //                                  font-size: 2vw;
-    //                                  margin: 0px;
-    //                                  padding: 2vw;
-    //                                  font-family: Arial;
-    //                                  overflow: hidden;
-    //                                  "
-    //                         >${val}</pre>
-    //                     `
-                        // white-space: pre-wrap; 
-                        // word-wrap: break-word;
-                        // padding: 2vw;
+    const transitionElement = `<div class="draggable transition-element" style="width: fit-content; position: absolute; top: 2%; right:2%; padding:5px;" data-key=${data_key} data-type=${type}>
+        Transition
+    </div>`
+  
     const elements = {
         'media_images' : imageElement,
         'media_gifs' : imageElement,
@@ -753,7 +799,8 @@ function setElements(val, type, data_key, stepMediaObject) {
         'videoStream' : streamElement,
         'avatars' : avatarsElement,
         'text' : textElement,
-        'osc' : oscElement
+        'osc' : oscElement,
+        'transition' : transitionElement
     }
 
     if (type in elements) {
@@ -761,15 +808,6 @@ function setElements(val, type, data_key, stepMediaObject) {
             $(`#${activeScreen}`).append(elements[type]);
         }
     }
-
-    // if (type === 'text') {
-    //     $(`#${activeScreen} pre`).on("keydown", function(e){
-    //         if(e.keyCode===13){
-    //          document.execCommand('insertHTML', false, '\n');
-    //          e.preventDefault();
-    //       }
-    //     });
-    // }
 
     if (type === 'media_audio') {
         audioElementPosition.top = audioElementPosition.top + 2;
@@ -871,7 +909,6 @@ function setElements(val, type, data_key, stepMediaObject) {
             }
             $(`#${activeScreen} .${type}`).css(stepMediaObject['css']);
         }  
-        
         else if (type === 'media_audio') {
             let mediaElement = $(`#${activeScreen}`).find(`*[data-key="${data_key}"]`);
             if (!mediaElement.find('.media').attr('src').includes(stepMediaObject['attributes']['src'])) {
@@ -880,7 +917,6 @@ function setElements(val, type, data_key, stepMediaObject) {
             mediaElement.find('.media').prop('volume', stepMediaObject['attributes']['volume'])
             mediaElement.find('.media').prop('loop', stepMediaObject['attributes']['loop'])
         }   
-        
         else {
             // APPLY CSS
             let mediaElement = $(`#${activeScreen}`).find(`*[data-key="${data_key}"]`);
@@ -1037,6 +1073,7 @@ function analyseStep(updatedStepObject) {
     updatedStepObject[activeScreen]['background-color'] = $(`#${activeScreen}`).css('background-color');
 
     let mediaOrder = [];
+    // exclude osc message from media order
     $(`#step-media .${activeScreen} li[data-type!='osc']`).each(function(){mediaOrder.push($(this).data('key'))});
     updatedStepObject[activeScreen]['media-order'] = mediaOrder;
 
@@ -1058,6 +1095,13 @@ function analyseStep(updatedStepObject) {
 
         // display none can be present if visibility was toggled
         delete object['css']['display'];
+
+        // animation related properties should be removed
+        $.each(object['css'], function(key, values) {
+            if (key.includes('animation')) {
+                delete object['css'][key]
+            }
+        })
 
         if ($(this).data('type') === 'media_video' || $(this).data('type') === 'media_images' || $(this).data('type') === 'media_gifs' || $(this).data('type') === 'media_audio') {
             object['attributes']['src'] = $(this).children().attr('src').replace(htmlPathToMedia, '');
@@ -1136,6 +1180,11 @@ function analyseStep(updatedStepObject) {
         })
     }
 
+    // add transition
+    if ('transition' in mainData[active.fileName]['scenes'][active.scene]['steps'][active.step][activeScreen]) {
+        updatedStepObject[activeScreen]['transition'] = mainData[active.fileName]['scenes'][active.scene]['steps'][active.step][activeScreen]['transition']
+    }
+
     return updatedStepObject;
 }
 
@@ -1175,6 +1224,91 @@ function saveStep(e) {
         activeScreen = currentActiveScreen;
         // SAVE TO JSON
         socket.emit("save step", {"fileName" : active.fileName, "scene": active.scene, "step" : active.step, 'stepObject' : step})
+    } else {
+        const button = e.currentTarget;
+        $(button).addClass('active');
+        setTimeout(() => {
+            $(button).removeClass('active');
+        }, 1800);
+    }
+}
+
+function addTransition(e) {
+    if (active.step !== "") {
+        $('#alert')
+        .empty()
+        .append(`<form>
+                    <p>Add step transitions:</p>
+                    <small>* animation applies to all media elements present in step</small><br>
+                    <div class='menu-item' style='text-align: left;'>
+                        <p class='menu-item'><u>Step start</u></p>
+                        <fieldset>
+                            <label for='start'>Animation:</label>
+                            <select id='start' name='start' style='width: fit-content'>
+                                <option value='none'>none</option>
+                                <option value='fade-in'>fade in</option>
+                            </select>
+                        </fieldset>
+                        <fieldset>
+                            <label for='start-duration'>Duration:</label>
+                            <input type='number' value=1 id='start-duration' name='start-duration' min = '0' step = '0.5' style='width: fit-content'></input> 
+                            s
+                        </fieldset>
+                    <div>
+                    <div class='menu-item' style='text-align: left;'>
+                        <p class='menu-item'><u>Step end</u></p>
+                        <fieldset>
+                            <label for='end'>Animation:</label>
+                            <select id='end' name='end' style='width: fit-content'>
+                                <option value='none'>none</option>
+                                <option value='fade-out'>fade out</option>
+                            </select>
+                        </fieldset>
+                        <fieldset>
+                            <label for='end-duration'>Duration:</label>
+                            <input type='number' value=1 id='end-duration' name='end-duration' min = '0' step = '0.5' style='width: fit-content'></input> 
+                            s
+                        </fieldset>
+                    <div>
+                    <div class='editor-buttons' style='justify-content: center;'>
+                        <button type='button'>Close</button>
+                    </div>
+                </form>`)
+        .dialog({
+            resizable: false,
+            modal: true, width: 300,
+            maxHeight: 600,
+        });
+
+        const currentStepActiveScreenData = mainData[active.fileName]['scenes'][active.scene]['steps'][active.step][activeScreen];
+        // set values if exist
+        if ('transition' in currentStepActiveScreenData) {
+            $(`#alert form #start option[value=${currentStepActiveScreenData['transition']['start']['animation-name']}]`).prop('selected', true);
+            $(`#alert form #end option[value=${currentStepActiveScreenData['transition']['end']['animation-name']}]`).prop('selected', true);
+
+            $('#alert form #start-duration').val(parseFloat(currentStepActiveScreenData['transition']['start']['animation-duration']));
+            $('#alert form #end-duration').val(parseFloat(currentStepActiveScreenData['transition']['end']['animation-duration']));
+        }
+
+        $('#alert form button').on('click', function() {
+            if ($('#alert form #start').val() !== 'none' || $('#alert form #end').val() !== 'none') {
+                currentStepActiveScreenData['transition'] = {
+                    "start" : {
+                        "animation-name" : $('#alert form #start').val(),
+                        "animation-duration" : $('#alert form #start-duration').val() + 's',
+                        "animation-fill-mode": "forwards"
+                    },
+                    "end" : {
+                        "animation-name" : $('#alert form #end').val(),
+                        "animation-duration" : $('#alert form #end-duration').val() + 's',
+                        "animation-fill-mode": "forwards"
+                    }
+                }
+            }
+            adjustTransitionButtonLabel();
+            closeModal();
+        })
+       
     } else {
         const button = e.currentTarget;
         $(button).addClass('active');
@@ -1774,35 +1908,6 @@ function deleteShow() {
     socket.emit("delete show", {"fileName" : active.fileName});
 }
 
-function toggleDebugger() {
-//     if (active.step !== "") {
-//     $('#debug').toggleClass('active');
-    
-//     if ($('#debug').hasClass('active')) {
-//         let currentActiveScreen = activeScreen;
-//     let step = {};
-//     screens.forEach(screen => {
-//         activeScreen = screen;
-//         step = Object.assign(step, analyseStep());
-
-//     });
-//     activeScreen = currentActiveScreen;
-//     sendStep(step);
-//         $(`#${activeScreen}`).hide();
-//         $('#preview-step').text('Close debugger');
-//     } else {
-//         $('#preview').show();
-//         $('#preview-step').text('Preview in debugger');
-//     }
-// }
-}
-
-// function sendStep(step) {
-//     // const step = analyseStep();
-//     socket.emit('step', step);
-//     // if (boite && 'send' in boite) boite.send();
-// }
-
 window.onload = function() {
     activateColorPicker();
 };
@@ -2038,43 +2143,220 @@ function toggleMediaList(e) {
 // EDITING
 {/* <img class="icon" src="../icons/arrow-rotate-right-solid.svg"></img> */}
 function editElement(key, type) {
-    if (type === 'text') {
-        var textStyle;
-        var textSizes
-        if (key === 'subtitles') {
-            textStyle = getComputedStyle($('.subtitles')[0]);
-            textSizes = styleToObject($('.subtitles').attr('style'));
-        } else {
-            textStyle = getComputedStyle($(`#${activeScreen} [data-key=${key}]`)[0]);
-            textSizes = styleToObject($(`#${activeScreen} [data-key=${key}]`).attr('style'));
-        }
-        // var textStyle = getComputedStyle($(`#${activeScreen} [data-key=${key}]`)[0]);
-        // var textSizes = styleToObject($(`#${activeScreen} [data-key=${key}]`).attr('style'));
+    if (type !== 'transition') {
+        if (type === 'text') {
+            var textStyle;
+            var textSizes
+            if (key === 'subtitles') {
+                textStyle = getComputedStyle($('.subtitles')[0]);
+                textSizes = styleToObject($('.subtitles').attr('style'));
+            } else {
+                textStyle = getComputedStyle($(`#${activeScreen} [data-key=${key}]`)[0]);
+                textSizes = styleToObject($(`#${activeScreen} [data-key=${key}]`).attr('style'));
+            }
+            // var textStyle = getComputedStyle($(`#${activeScreen} [data-key=${key}]`)[0]);
+            // var textSizes = styleToObject($(`#${activeScreen} [data-key=${key}]`).attr('style'));
 
-        var isActive = {
-            "bold" : (textStyle.fontWeight === '700') ? ('active') : (''),
-            "italic" : (textStyle.fontStyle === 'italic') ? ('active') : (''),
-            "underline" : (textStyle.textDecorationLine === 'underline') ? ('active') : (''),
-            "center" : (textStyle.textAlign === 'center') ? ('active') : (''),
-            "left" : (textStyle.textAlign === 'left') ? ('active') : (''),
-            "right" : (textStyle.textAlign === 'right') ? ('active') : ('')
-        }
-        $('#alert')
-        .empty()
-        .append(`<div class = 'editor-menu'>  
-                        <div class='menu-item'>
-                            <label for="color">FONT COLOR</label>
-                            <input
-                                id = ${key + '_color'} 
-                                autocomplete="off"
-                                _list="list_decors"
-                                class="color-picker _box-min d-none"
-                                type="text"
-                                name="color"
-                                value= ${(textStyle.color) ? (textStyle.color.replaceAll(' ', '')) : ('rgb(255,255,255)')}
-                            />
+            var isActive = {
+                "bold" : (textStyle.fontWeight === '700') ? ('active') : (''),
+                "italic" : (textStyle.fontStyle === 'italic') ? ('active') : (''),
+                "underline" : (textStyle.textDecorationLine === 'underline') ? ('active') : (''),
+                "center" : (textStyle.textAlign === 'center') ? ('active') : (''),
+                "left" : (textStyle.textAlign === 'left') ? ('active') : (''),
+                "right" : (textStyle.textAlign === 'right') ? ('active') : ('')
+            }
+            $('#alert')
+            .empty()
+            .append(`<div class = 'editor-menu'>  
+                            <div class='menu-item'>
+                                <label for="color">FONT COLOR</label>
+                                <input
+                                    id = ${key + '_color'} 
+                                    autocomplete="off"
+                                    _list="list_decors"
+                                    class="color-picker _box-min d-none"
+                                    type="text"
+                                    name="color"
+                                    value= ${(textStyle.color) ? (textStyle.color.replaceAll(' ', '')) : ('rgb(255,255,255)')}
+                                />
+                            </div>
+                            <div class='menu-item'>
+                                <label for="background-color">BACKGROUND COLOR</label>
+                                <input
+                                    id = ${key + '_background-color'} 
+                                    autocomplete="off"
+                                    _list="list_decors"
+                                    class="color-picker _box-min d-none"
+                                    type="text"
+                                    name="background-color"
+                                    value = ${(textStyle.backgroundColor) ? (textStyle.backgroundColor.replaceAll(' ', '')) : ('transparent')} 
+                                />
+                            </div>
+                            <div class='menu-item'>
+                                <p>FONT STYLE</p>
+                                <select class='font-family' id=${key + '_font-family'}>
+                                    <option value='' disabled ${textStyle.fontFamily === '' ? 'selected' : ''}>Change font style</option>
+                                    <option value='Arial' ${textStyle.fontFamily === 'Arial' ? 'selected' : ''}>Arial</option>
+                                    <option value='AvenirBlack' ${textStyle.fontFamily === 'AvenirBlack' ? 'selected' : ''}>AvenirBlack</option>
+                                    <option value='AvenirRoman' ${textStyle.fontFamily === 'AvenirRoman' ? 'selected' : ''}>AvenirRoman</option>
+                                    <option value='DINLight' ${textStyle.fontFamily === 'DINLight' ? 'selected' : ''}>DINLight</option>
+                                    <option value='faBrands' ${textStyle.fontFamily === 'faBrands' ? 'selected' : ''}>faBrands</option>
+                                    <option value='fishbourne' ${textStyle.fontFamily === 'fishbourne' ? 'selected' : ''}>fishbourne</option>
+                                    <option value='fixedsys' ${textStyle.fontFamily === 'fixedsys' ? 'selected' : ''}>fixedsys</option>
+                                    <option value='RobotoMedium' ${textStyle.fontFamily === 'RobotoMedium' ? 'selected' : ''}>RobotoMedium</option>
+                                    <option value='RobotoRegular' ${textStyle.fontFamily === 'RobotoRegular' ? 'selected' : ''}>RobotoRegular</option>
+                                </select>
+                            </div>
+                            <div class='menu-item'>
+                                <p>FONT SIZE</p>
+                                <input class='font-size' type="number" min = '0' step = '0.1' id = ${key + '_font-size'} value=${parseFloat(textSizes['font-size'])}>
+                            </div>
+                            <div class='editor-buttons font-decor'>
+                                <div class='menu-item'>
+                                    <button class='font-style ${isActive.bold}' id = ${key + '_font-weight_bold'}>
+                                        <img class='icon' src="../icons/bold.svg"></img>
+                                    </div>
+                                </button>
+                                <div class='menu-item'>
+                                    <button class='font-style ${isActive.italic}' id = ${key + '_font-style_italic'}>
+                                        <img class='icon' src="../icons/italic.svg"></img>
+                                    </div>
+                                </button>
+                                <div class='menu-item'>
+                                    <button class='font-style ${isActive.underline}' id = ${key + '_text-decoration_underline'}>
+                                        <img class='icon' src="../icons/underline.svg"></img>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class='editor-buttons font-aligment'>
+                                <div class='menu-item'>
+                                    <button class='text-align ${isActive.center}' id = ${key + '_text-align_center'}>
+                                        <img class='icon' src="../icons/align-center.svg"></img>
+                                    </div>
+                                </button>
+                                <div class='menu-item'>
+                                    <button class='text-align ${isActive.left}' id = ${key + '_text-align_left'}>
+                                        <img class='icon' src="../icons/align-left.svg"></img>
+                                    </div>
+                                </button>
+                                <div class='menu-item'>
+                                    <button class='text-align ${isActive.right}' id = ${key + '_text-align_right'}>
+                                        <img class='icon' src="../icons/align-right.svg"></img>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class='menu-item modes-div'>
+                                <p>EFFECTS</p>
+                                <label for="${key + '_final-fantasy'}">final fantasy</label>
+                                <input type="checkbox" value="final-fantasy" class="modes" id="${key + '_final-fantasy'}" ${$(`#${activeScreen} [data-key=${key}]`).hasClass('mode--final-fantasy') ? 'checked' : ''}></input>
+                            </div>
+                            <div class='border-div'>
+                            <p>BORDER</p>
+                            <div class='menu-item'>
+                                <input 
+                                    class ='font-size menu-item border' 
+                                    type ="number" 
+                                    min = '0'
+                                    step = '0.5'
+                                    id = ${key + '_border-width'} 
+                                    value = ${(textStyle.borderWidth) ? (parseFloat(textSizes['border-width'])) : (0)} 
+                                >
+                            </div>
+                            <div class='menu-item'>
+                                <input
+                                    id = ${key + '_border-color'} 
+                                    autocomplete="off"
+                                    _list="list_decors"
+                                    class="color-picker _box-min d-none menu-item border-color"
+                                    type="text"
+                                    name="border-color"
+                                    value = ${(textStyle.borderColor) ? (textStyle.borderColor.replaceAll(' ', '')) : ('transparent')} 
+                                />
+                            </div>
+                            <select value = ${(textStyle.borderStyle) ? (textStyle.borderStyle) : ('none')}  class='menu-item border' id = ${key + '_border-style'}>
+                                <option value='solid' ${(textStyle.borderStyle == 'solid') ? ('selected') : (null)}>Solid</option>
+                                <option value='dashed' ${(textStyle.borderStyle == 'dashed') ? ('selected') : (null)}>Dashed</option>
+                                <option value='dotted' ${(textStyle.borderStyle == 'dotted') ? ('selected') : (null)}>Dotted</option>
+                                <option value='double' ${(textStyle.borderStyle === 'double') ? ('selected') : (null)}>Double</option>
+                                <option value='none' ${(textStyle.borderStyle === 'none' || textStyle.borderStyle === '') ? ('selected') : (null)}>none</option>
+                            </select>
+                            </div>
+                            <div class='menu-item rotation'>
+                                <p>ROTATION</p>
+                                <div class='editor-buttons'>
+                                    <button>
+                                    <img class="icon" src="../icons/arrow-rotate-right-solid.svg" onclick="rotateRight('${key}');"></img>
+                                    </button>
+                                </div>
+                                <div class='editor-buttons'>
+                                <button>
+                                    <img class="icon" src="../icons/arrow-rotate-left-solid.svg" onclick="rotateLeft('${key}');"></img>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <div class='menu-item'>
+                    </div>`)
+                    .dialog({
+                        resizable: false,
+                        modal: true, width: 300,
+                        maxHeight: 600,
+                        dialogClass: "no-titlebar"
+                    });
+
+        activateColorPicker();
+        activateFontSizeControler();
+        // activatePaddingControler();
+        activateFontStyleControler();
+        activateTextAlignControler();
+        activateTextModesControler();
+        activateBorderControler();
+        activateFontFamilyControler();
+    
+        } else if (type === 'osc') {
+            $('#alert')
+            .empty()
+            .append(` <div class="menu-item">
+                        <p>Edit OSC message:</p>
+                        <form onsubmit="editOSCMessage(event, '${key}')">
+                        <label>
+                            IP address
+                            <input name='IPaddress' disabled value=${$(`li[data-key=${key}]`).data('ip')}>
+                        </label>
+                        <label>
+                            Port
+                            <input name='port' disabled value=${$(`li[data-key=${key}]`).data('port')}>
+                        </label><br>
+                        <label>
+                            Address
+                            <input name='address' required oninput="this.value = moderateOSCAddressInput(this.value)" value=${$(`li[data-key=${key}]`).data('address')}>
+                        </label>
+                        <label>
+                            Message
+                            <input name='message' required value='${$(`li[data-key=${key}]`).data('message')}'>
+                        </label><br>
+                        <div class='editor-buttons'>
+                            <button type='submit'>Save</button>
+                            <button type='submit' class="testOSCMessage">Test</button>
+                        </div>
+                        </form>
+                    </div>`)
+            .dialog({
+                resizable: false,
+                modal: true, width: 300,
+                dialogClass: "no-titlebar"
+            });
+        } else {
+            $('#alert')
+            .empty()
+            .append(`<div  
+                        class = 'editor-menu'
+                    >   
+                        <div class='menu-item size'>
+                            <p onClick="setSize(event, 'cover', '${key}', '${type}')">COVER</p>
+                            <p onClick="setSize(event, 'contain', '${key}',  '${type}')">CONTAIN</p>
+                            <p onClick="setSize(event, 'custom', '${key}', '${type}')">custom size</p>
+                        </div>
+                        <div class='menu-item bg-color'>
                             <label for="background-color">BACKGROUND COLOR</label>
                             <input
                                 id = ${key + '_background-color'} 
@@ -2083,274 +2365,98 @@ function editElement(key, type) {
                                 class="color-picker _box-min d-none"
                                 type="text"
                                 name="background-color"
-                                value = ${(textStyle.backgroundColor) ? (textStyle.backgroundColor.replaceAll(' ', '')) : ('transparent')} 
+                            
                             />
                         </div>
-                        <div class='menu-item'>
-                            <p>FONT STYLE</p>
-                            <select class='font-family' id=${key + '_font-family'}>
-                                <option value='' disabled ${textStyle.fontFamily === '' ? 'selected' : ''}>Change font style</option>
-                                <option value='Arial' ${textStyle.fontFamily === 'Arial' ? 'selected' : ''}>Arial</option>
-                                <option value='AvenirBlack' ${textStyle.fontFamily === 'AvenirBlack' ? 'selected' : ''}>AvenirBlack</option>
-                                <option value='AvenirRoman' ${textStyle.fontFamily === 'AvenirRoman' ? 'selected' : ''}>AvenirRoman</option>
-                                <option value='DINLight' ${textStyle.fontFamily === 'DINLight' ? 'selected' : ''}>DINLight</option>
-                                <option value='faBrands' ${textStyle.fontFamily === 'faBrands' ? 'selected' : ''}>faBrands</option>
-                                <option value='fishbourne' ${textStyle.fontFamily === 'fishbourne' ? 'selected' : ''}>fishbourne</option>
-                                <option value='fixedsys' ${textStyle.fontFamily === 'fixedsys' ? 'selected' : ''}>fixedsys</option>
-                                <option value='RobotoMedium' ${textStyle.fontFamily === 'RobotoMedium' ? 'selected' : ''}>RobotoMedium</option>
-                                <option value='RobotoRegular' ${textStyle.fontFamily === 'RobotoRegular' ? 'selected' : ''}>RobotoRegular</option>
-                            </select>
-                        </div>
-                        <div class='menu-item'>
-                            <p>FONT SIZE</p>
-                            <input class='font-size' type="number" min = '0' step = '0.1' id = ${key + '_font-size'} value=${parseFloat(textSizes['font-size'])}>
-                        </div>
-                        <div class='editor-buttons font-decor'>
-                            <div class='menu-item'>
-                                <button class='font-style ${isActive.bold}' id = ${key + '_font-weight_bold'}>
-                                    <img class='icon' src="../icons/bold.svg"></img>
+                        <div class='menu-item bg-image'>
+                            <b onclick="toggleMediaList(event)">BACKGROUND IMAGE</b> 
+                            <div id="media-backgrounds" class='d-none'>
+                                <div class="media_images media_cat">
+                                <p onclick="removeBackgroundImage('${key}')" style="margin-bottom: 10px;">NONE</p>
                                 </div>
-                            </button>
-                            <div class='menu-item'>
-                                <button class='font-style ${isActive.italic}' id = ${key + '_font-style_italic'}>
-                                    <img class='icon' src="../icons/italic.svg"></img>
-                                </div>
-                            </button>
-                            <div class='menu-item'>
-                                <button class='font-style ${isActive.underline}' id = ${key + '_text-decoration_underline'}>
-                                    <img class='icon' src="../icons/underline.svg"></img>
-                                </button>
                             </div>
-                        </div>
-                        <div class='editor-buttons font-aligment'>
-                            <div class='menu-item'>
-                                <button class='text-align ${isActive.center}' id = ${key + '_text-align_center'}>
-                                    <img class='icon' src="../icons/align-center.svg"></img>
-                                </div>
-                            </button>
-                            <div class='menu-item'>
-                                <button class='text-align ${isActive.left}' id = ${key + '_text-align_left'}>
-                                    <img class='icon' src="../icons/align-left.svg"></img>
-                                </div>
-                            </button>
-                            <div class='menu-item'>
-                                <button class='text-align ${isActive.right}' id = ${key + '_text-align_right'}>
-                                    <img class='icon' src="../icons/align-right.svg"></img>
-                                </button>
-                            </div>
-                        </div>
-                        <div class='menu-item modes-div'>
-                            <p>EFFECTS</p>
-                            <label for="${key + '_final-fantasy'}">final fantasy</label>
-                            <input type="checkbox" value="final-fantasy" class="modes" id="${key + '_final-fantasy'}" ${$(`#${activeScreen} [data-key=${key}]`).hasClass('mode--final-fantasy') ? 'checked' : ''}></input>
-                        </div>
-                        <div class='border-div'>
-                        <p>BORDER</p>
-                        <div class='menu-item'>
-                            <input 
-                                class ='font-size menu-item border' 
-                                type ="number" 
-                                min = '0'
-                                step = '0.5'
-                                id = ${key + '_border-width'} 
-                                value = ${(textStyle.borderWidth) ? (parseFloat(textSizes['border-width'])) : (0)} 
-                            >
-                        </div>
-                        <div class='menu-item'>
-                            <input
-                                id = ${key + '_border-color'} 
-                                autocomplete="off"
-                                _list="list_decors"
-                                class="color-picker _box-min d-none menu-item border-color"
-                                type="text"
-                                name="border-color"
-                                value = ${(textStyle.borderColor) ? (textStyle.borderColor.replaceAll(' ', '')) : ('transparent')} 
-                            />
-                        </div>
-                        <select value = ${(textStyle.borderStyle) ? (textStyle.borderStyle) : ('none')}  class='menu-item border' id = ${key + '_border-style'}>
-                            <option value='solid' ${(textStyle.borderStyle == 'solid') ? ('selected') : (null)}>Solid</option>
-                            <option value='dashed' ${(textStyle.borderStyle == 'dashed') ? ('selected') : (null)}>Dashed</option>
-                            <option value='dotted' ${(textStyle.borderStyle == 'dotted') ? ('selected') : (null)}>Dotted</option>
-                            <option value='double' ${(textStyle.borderStyle === 'double') ? ('selected') : (null)}>Double</option>
-                            <option value='none' ${(textStyle.borderStyle === 'none' || textStyle.borderStyle === '') ? ('selected') : (null)}>none</option>
-                        </select>
                         </div>
                         <div class='menu-item rotation'>
-                            <p>ROTATION</p>
-                            <div class='editor-buttons'>
-                                <button>
+                            <p>ROTATION</p> 
+                            <div>
                                 <img class="icon" src="../icons/arrow-rotate-right-solid.svg" onclick="rotateRight('${key}');"></img>
-                                </button>
                             </div>
-                            <div class='editor-buttons'>
-                            <button>
+                            <div>
                                 <img class="icon" src="../icons/arrow-rotate-left-solid.svg" onclick="rotateLeft('${key}');"></img>
-                                </button>
                             </div>
                         </div>
-                    </div>
-                </div>`)
-                .dialog({
-                    resizable: false,
-                    modal: true, width: 300,
-                    maxHeight: 600,
-                    dialogClass: "no-titlebar"
-                });
+                    </div>`)
+            .dialog({
+                resizable: false,
+                modal: true, width: 300,
+                // maxHeight: 600,
+                dialogClass: "no-titlebar"
+            });
+            $('#media .media_images div').clone().appendTo('#media-backgrounds .media_images').show();
+            $('#media-backgrounds .media_images div').click(function(){
+                $(`#${activeScreen} [data-key=${key}]`).css({'background-image': `url('${htmlPathToMedia}${this.title}')`, 'background-size': 'cover', 'background-repeat': 'no-repeat'});
+                $('.bg-image b').click();
+            });
+            activateColorPicker();
+        }
 
-    activateColorPicker();
-    activateFontSizeControler();
-    // activatePaddingControler();
-    activateFontStyleControler();
-    activateTextAlignControler();
-    activateTextModesControler();
-    activateBorderControler();
-    activateFontFamilyControler();
-   
-    } else if (type === 'osc') {
-        $('#alert')
-        .empty()
-        .append(` <div class="menu-item">
-                    <p>Edit OSC message:</p>
-                    <form onsubmit="editOSCMessage(event, '${key}')">
-                    <label>
-                        IP address
-                        <input name='IPaddress' disabled value=${$(`li[data-key=${key}]`).data('ip')}>
-                    </label>
-                    <label>
-                        Port
-                        <input name='port' disabled value=${$(`li[data-key=${key}]`).data('port')}>
-                    </label><br>
-                    <label>
-                        Address
-                        <input name='address' required oninput="this.value = moderateOSCAddressInput(this.value)" value=${$(`li[data-key=${key}]`).data('address')}>
-                    </label>
-                    <label>
-                        Message
-                        <input name='message' required value='${$(`li[data-key=${key}]`).data('message')}'>
-                    </label><br>
-                    <div class='editor-buttons'>
-                        <button type='submit'>Save</button>
-                        <button type='submit' class="testOSCMessage">Test</button>
-                    </div>
-                    </form>
-                </div>`)
-        .dialog({
-            resizable: false,
-            modal: true, width: 300,
-            dialogClass: "no-titlebar"
-        });
-    } else {
-        $('#alert')
-        .empty()
-        .append(`<div  
-                    class = 'editor-menu'
-                >   
-                    <div class='menu-item size'>
-                        <p onClick="setSize(event, 'cover', '${key}', '${type}')">COVER</p>
-                        <p onClick="setSize(event, 'contain', '${key}',  '${type}')">CONTAIN</p>
-                        <p onClick="setSize(event, 'custom', '${key}', '${type}')">custom size</p>
-                    </div>
-                    <div class='menu-item bg-color'>
-                        <label for="background-color">BACKGROUND COLOR</label>
-                        <input
-                            id = ${key + '_background-color'} 
-                            autocomplete="off"
-                            _list="list_decors"
-                            class="color-picker _box-min d-none"
-                            type="text"
-                            name="background-color"
-                           
-                        />
-                    </div>
-                    <div class='menu-item bg-image'>
-                        <b onclick="toggleMediaList(event)">BACKGROUND IMAGE</b> 
-                        <div id="media-backgrounds" class='d-none'>
-                            <div class="media_images media_cat">
-                            <p onclick="removeBackgroundImage('${key}')" style="margin-bottom: 10px;">NONE</p>
-                            </div>
+        if (type === 'media_video') {
+            const video = $(`#${activeScreen} [data-key=${key}] video`)[0];
+            $('#alert .editor-menu')
+            .append(`<div class='menu-item video-controls'>
+                        <p class='editor-section'>CONTROLS</p> 
+                        <div class='loop editor-buttons'>
+                            <button class="${(video.loop) ? ('active') : ('')}" onclick="setVideoAttribute('${key}', 'loop', event);">
+                                loop
+                            </button>
                         </div>
-                    </div>
-                    <div class='menu-item rotation'>
-                        <p>ROTATION</p> 
-                        <div>
-                            <img class="icon" src="../icons/arrow-rotate-right-solid.svg" onclick="rotateRight('${key}');"></img>
+                        <div class='editor-buttons'>
+                            <button class="mute ${(video.muted) ? ('active') : ('')}" onclick="setVideoAttribute('${key}', 'muted', event);">
+                            </button>
                         </div>
-                        <div>
-                            <img class="icon" src="../icons/arrow-rotate-left-solid.svg" onclick="rotateLeft('${key}');"></img>
-                        </div>
-                    </div>
-                </div>`)
-        .dialog({
-            resizable: false,
-            modal: true, width: 300,
-            // maxHeight: 600,
-            dialogClass: "no-titlebar"
-        });
-        $('#media .media_images div').clone().appendTo('#media-backgrounds .media_images').show();
-        $('#media-backgrounds .media_images div').click(function(){
-            $(`#${activeScreen} [data-key=${key}]`).css({'background-image': `url('${htmlPathToMedia}${this.title}')`, 'background-size': 'cover', 'background-repeat': 'no-repeat'});
-            $('.bg-image b').click();
-        });
-        activateColorPicker();
-    }
-
-    if (type === 'media_video') {
-        const video = $(`#${activeScreen} [data-key=${key}] video`)[0];
-        $('#alert .editor-menu')
-        .append(`<div class='menu-item video-controls'>
-                    <p class='editor-section'>CONTROLS</p> 
-                    <div class='loop editor-buttons'>
-                        <button class="${(video.loop) ? ('active') : ('')}" onclick="setVideoAttribute('${key}', 'loop', event);">
-                            loop
-                        </button>
-                    </div>
-                    <div class='editor-buttons'>
-                        <button class="mute ${(video.muted) ? ('active') : ('')}" onclick="setVideoAttribute('${key}', 'muted', event);">
-                        </button>
-                    </div>
-                </div>
-                <div class="menu-item">
-                    <input type="range" id="volume" name="volume" min="0" max="100" value=${($(video).prop('volume')*100) ? $(video).prop('volume')*100 : '50'} onchange="adjustMediaVolume('${key}', 'volume', event)">
-                    <label for="volume">Volume</label>
-                </div>
-                <div class="menu-item">
-                    <select id="select-audioOutput">
-                    </select>
-                </div>`)
-        getAudioOutputs(key);
-    }
-
-    if (type === 'media_audio') {
-        const audio = $(`#${activeScreen} [data-key=${key}] audio`)[0];
-        $('#alert .editor-menu')
-        .empty()
-        .append(`<div class='menu-item audio-controls'>
-                    <p class='editor-section'>CONTROLS</p> 
-                    <div class='loop editor-buttons'>
-                        <button class="${(audio.loop) ? ('active') : ('')}" onclick="setAudioAttribute('${key}', 'loop', event);">
-                            loop
-                        </button>
                     </div>
                     <div class="menu-item">
-                        <input type="range" id="volume" name="volume" min="0" max="100" value=${($(audio).prop('volume')*100) ? $(audio).prop('volume')*100 : '50'} onchange="adjustMediaVolume('${key}', 'volume', event)">
+                        <input type="range" id="volume" name="volume" min="0" max="100" value=${($(video).prop('volume')*100) ? $(video).prop('volume')*100 : '50'} onchange="adjustMediaVolume('${key}', 'volume', event)">
                         <label for="volume">Volume</label>
                     </div>
-                </div>`)
-    }
+                    <div class="menu-item">
+                        <select id="select-audioOutput">
+                        </select>
+                    </div>`)
+            getAudioOutputs(key);
+        }
 
-    if (key === 'subtitles') {
-        $('.padding').parent().remove();
-        $('.font-decor').remove();
-        $('.font-aligment').remove();
-        $('.border-div').remove();
-        $('.modes-div').remove();
-        $('.rotation').remove();
-        $('#alert .editor-menu').append(`<div class="menu-item">Position</div>`)
-    } else {
+        if (type === 'media_audio') {
+            const audio = $(`#${activeScreen} [data-key=${key}] audio`)[0];
+            $('#alert .editor-menu')
+            .empty()
+            .append(`<div class='menu-item audio-controls'>
+                        <p class='editor-section'>CONTROLS</p> 
+                        <div class='loop editor-buttons'>
+                            <button class="${(audio.loop) ? ('active') : ('')}" onclick="setAudioAttribute('${key}', 'loop', event);">
+                                loop
+                            </button>
+                        </div>
+                        <div class="menu-item">
+                            <input type="range" id="volume" name="volume" min="0" max="100" value=${($(audio).prop('volume')*100) ? $(audio).prop('volume')*100 : '50'} onchange="adjustMediaVolume('${key}', 'volume', event)">
+                            <label for="volume">Volume</label>
+                        </div>
+                    </div>`)
+        }
 
-        // APPLY CURRENT STYLE
-        let objectFit = $(`#${activeScreen} [data-key=${key}]`).css('object-fit').toUpperCase();
-        $(`.size p:contains('${objectFit}')`).toggleClass('active');
+        if (key === 'subtitles') {
+            $('.padding').parent().remove();
+            $('.font-decor').remove();
+            $('.font-aligment').remove();
+            $('.border-div').remove();
+            $('.modes-div').remove();
+            $('.rotation').remove();
+            $('#alert .editor-menu').append(`<div class="menu-item">Position</div>`)
+        } else {
+            // APPLY CURRENT STYLE
+            let objectFit = $(`#${activeScreen} [data-key=${key}]`).css('object-fit').toUpperCase();
+            $(`.size p:contains('${objectFit}')`).toggleClass('active');
+        }
     }
 }
 

@@ -639,7 +639,6 @@ socket.on('remove avatar', (data) =>{
 htmlPathToMedia = './data/media/';
 
 function clearUnwantedMedia(data){
-  // const div = document.getElementsByClassName('step')[0];
   const stepMedia = data['media'];
 
   let keysArray = [].map.call($decor.children().not('#boite, .console'), function (e) {
@@ -665,55 +664,53 @@ function applyZIndexes(data) {
   })
 }
 
-let videoElementsNo = 0;
-let loadedVideos = 0;
 
-// function countVideoMedias(stepMedia) {
-//   $.each(stepMedia, function() {
-//     if (this.type=== 'media_video') videoElementsNo = videoElementsNo + 1;
-//   })
-// }
+let stepData = {};
 
 function displayStep(data) {
+     // CHECK IF TRANSITION FROM PREVIOUS STEP SHOULD BE ADDED
+    //  if ('transition' in data) {
+    //     const currentStepPreviewData = mainData[active.fileName]['scenes'][active.scene]['steps'][active.step][activeScreen];
+        if ('transition' in stepData && stepData['transition']['end'] !== 'none') {
+            setTimeout(() => {
+                continueSettingStep();
+            }, parseFloat(stepData['transition']['end']['animation-duration'])*1000);
 
-    clearUnwantedMedia(data);
+            for (let data_key of stepData['media-order']) {
+                $(`.step__decor div[data-key=${data_key}]`).css(stepData['transition']['end']);
+            }
+        } else {
+            continueSettingStep();
+        }
+    // } else {
+    //     continueSettingStep();
+    // }
+      function continueSettingStep() {
+        clearUnwantedMedia(data);
 
-    // CLEAR PREVIOUS MODES
-    finalFantasy('');
-
-    const mediaOrder = data['media-order'];
-    const stepMedia = data['media'];
-
-    videoElementsNo = 0;
-    loadedVideos = 0;
-
-    // countVideoMedias(stepMedia);
-
-    for (let data_key of mediaOrder) {
-      setElements(stepMedia[data_key].attributes.src, stepMedia[data_key]['type'], data_key, stepMedia[data_key]);
-    }
-    applyZIndexes(data); 
+        // CLEAR PREVIOUS MODES
+        finalFantasy('');
     
-    setElements("", "console", "", data['console']);
-    $('.step').css('background-color', data['background-color']);
-
-    // start playing videos only after all are loaded to play trough
-    // Array.from(document.getElementsByTagName('video')).forEach(video => {
-    //   video.oncanplay = function() {
-    //     loadedVideos = loadedVideos + 1;
-    //     if (loadedVideos === videoElementsNo) {
-    //       startAllVideos()
-    //     }
-    //   }
-    // })
+        const mediaOrder = data['media-order'];
+        const stepMedia = data['media'];
+    
+        for (let data_key of mediaOrder) {
+          setElements(stepMedia[data_key].attributes.src, stepMedia[data_key]['type'], data_key, stepMedia[data_key]);
+          // SET START TRANSITION if exists
+          if ('transition' in data && data['transition']['start'] !== 'none') {
+              $(`.step__decor div[data-key=${data_key}]`).css(data['transition']['start']);
+          }
+        }
+        applyZIndexes(data); 
+        
+        setElements("", "console", "", data['console']);
+        $('.step').css('background-color', data['background-color']);
+    
+        stepData = data;
+      }
+   
 }
 
-// function startAllVideos() {
-//   Array.from(document.getElementsByTagName('video')).forEach(video => {
-//     console.log(repet)
-//     video.play();
-//   })
-// }
 
 function styleToObject(style) {
   const regex = /([\w-]*)\s*:\s*([^;]*)/g;
@@ -725,7 +722,6 @@ function styleToObject(style) {
 
 
 function setElements(val, type, data_key, stepMediaObject) {
-  // $('#media-editor')[0].innerHTML = '';
   src = '/data/media/' + val;
  
   const avatarsElement = `<div class="avatars" style="width: 25%; height: 15%; position: absolute; top: 25%; left:25%; border-radius: 45%; z-index:99;" data-key=${data_key} data-type=${type}>
@@ -751,22 +747,25 @@ function setElements(val, type, data_key, stepMediaObject) {
                             <video autoplay style="width: 100%;" class="media"></video>
                           </div>`
  
-  const textElement = `
-                        <pre contenteditable="true" class="text draggable" data-key=${data_key} data-type=${type} 
-                                  style=" 
-                                  position: absolute; 
-                                  top: 25%; 
-                                  left:25%;
-                                  white-space: pre-wrap; 
-                                  word-wrap: break-word;
-                                  color: white;
-                                  font-size: 16px;
-                                  margin: 0px;
-                                  padding: 10px;
-                                  font-family: Arial;
-                                  "
-                        >${val}</pre>
-                    `
+                          
+  // const textElement = `
+  //                       <pre contenteditable="true" class="text draggable" data-key=${data_key} data-type=${type} 
+  //                                 style=" 
+  //                                 position: absolute; 
+  //                                 top: 25%; 
+  //                                 left:25%;
+  //                                 white-space: pre-wrap; 
+  //                                 word-wrap: break-word;
+  //                                 color: white;
+  //                                 font-size: 16px;
+  //                                 margin: 0px;
+  //                                 padding: 10px;
+  //                                 font-family: Arial;
+  //                                 "
+  //                       >${val}</pre>
+  //                   `
+
+                    const textElement = `<div class="text" data-key=${data_key} data-type=${type} style="position: absolute; top: 25%; left:25%; width: 35%; height: 35%; color: white; font-size: 2vw; font-family: Arial; overflow: hidden;"><pre style="white-space: pre-wrap; overflow-wrap: break-word;">${val}</pre></div>`
   
   const elements = {
     'media_images' : imageElement,
@@ -853,12 +852,12 @@ function setElements(val, type, data_key, stepMediaObject) {
 
            // ADD NEW TEXT IF NEEDED
            if (stepMediaObject['type'] === 'text') {
-              if (mediaElement.text() !== stepMediaObject['content']) {
+              if (mediaElement.find('pre').text() !== stepMediaObject['content']) {
                  // CHECK IF MODES IN CLASSES
                 if (stepMediaObject['classes'].join(' ').includes('fantasy')) {
                   finalFantasy(stepMediaObject['content'], data_key, cat);
                 } else {
-                  mediaElement.text(stepMediaObject['content']);
+                  mediaElement.find('pre').text(stepMediaObject['content']);
                 }
               }
 
